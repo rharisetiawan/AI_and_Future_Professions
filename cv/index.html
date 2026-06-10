@@ -400,6 +400,19 @@
             font-weight: 600;
         }
 
+        @media (max-width: 768px) {
+            body { padding: 12px; }
+            .header-bar { flex-direction: column; text-align: center; gap: 6px; padding: 16px 20px; }
+            .content { grid-template-columns: 1fr; }
+            .left-col { border-right: none; border-bottom: 1px solid rgba(99, 155, 255, 0.08); padding: 32px 24px; }
+            .right-col { padding: 24px; gap: 16px; }
+            .sections-grid { grid-template-columns: 1fr; }
+            .career-timeline { flex-direction: column; gap: 0; margin-top: 12px; }
+            .career-step { border-top: none; border-left: 2px solid rgba(59, 130, 246, 0.15); padding: 0 0 20px 20px; text-align: left; }
+            .career-step::before { top: 0; left: -5px; transform: none; }
+            .footer { flex-direction: column; text-align: center; gap: 12px; padding: 20px; }
+        }
+
         @media print {
             body {
                 padding: 0;
