@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+    <title>📝 Catatan Speaker — Pak Hari</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        :root {
+            --bg: #0f172a; --card: #1e293b; --border: rgba(100,160,255,0.15);
+            --blue: #60a5fa; --cyan: #22d3ee; --green: #34d399;
+            --orange: #fbbf24; --purple: #a78bfa; --red: #f87171;
+            --text: #f1f5f9; --muted: rgba(200,220,255,0.6);
+        }
+        body { background: var(--bg); font-family: 'Inter', sans-serif; color: var(--text); padding: 16px; }
+        .header { text-align: center; padding: 20px 16px 16px; border-bottom: 1px solid var(--border); margin-bottom: 20px; }
+        .header h1 { font-size: 20px; font-weight: 700; color: var(--blue); margin-bottom: 4px; }
+        .header p { font-size: 13px; color: var(--muted); }
+        .timer-bar { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 16px 20px; margin-bottom: 20px; display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+        .timer-label { font-size: 13px; color: var(--muted); margin-bottom: 2px; }
+        .timer-display { font-size: 32px; font-weight: 700; color: var(--cyan); font-variant-numeric: tabular-nums; letter-spacing: 2px; }
+        .timer-btns { display: flex; gap: 8px; }
+        .timer-btns button { background: rgba(96,165,250,0.12); border: 1px solid rgba(96,165,250,0.2); border-radius: 8px; padding: 10px 18px; color: var(--blue); font-family: 'Inter'; font-size: 15px; font-weight: 600; cursor: pointer; }
+        .timer-btns button:active { background: rgba(96,165,250,0.3); }
+        .slide-card { background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 20px; margin-bottom: 16px; position: relative; overflow: hidden; }
+        .slide-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; }
+        .s1::before { background: linear-gradient(90deg, var(--blue), var(--cyan)); }
+        .s2::before { background: linear-gradient(90deg, var(--purple), var(--blue)); }
+        .s3::before { background: linear-gradient(90deg, var(--orange), var(--red)); }
+        .s4::before { background: linear-gradient(90deg, var(--cyan), var(--green)); }
+        .s5::before { background: linear-gradient(90deg, var(--green), var(--cyan)); }
+        .s6::before { background: linear-gradient(90deg, var(--red), var(--orange)); }
+        .s7::before { background: linear-gradient(90deg, var(--orange), var(--purple)); }
+        .s8::before { background: linear-gradient(90deg, var(--blue), var(--purple)); }
+        .slide-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; }
+        .slide-num { font-size: 11px; font-weight: 700; letter-spacing: 2px; color: var(--muted); text-transform: uppercase; }
+        .slide-time { font-size: 12px; font-weight: 600; background: rgba(96,165,250,0.12); border: 1px solid rgba(96,165,250,0.2); border-radius: 6px; padding: 3px 10px; color: var(--blue); }
+        .slide-title-note { font-size: 18px; font-weight: 700; color: var(--text); margin-bottom: 14px; line-height: 1.3; }
+        .note-section { margin-bottom: 14px; }
+        .note-section-label { font-size: 10px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: var(--cyan); margin-bottom: 7px; }
+        .script-block { background: rgba(96,165,250,0.06); border-left: 3px solid var(--blue); border-radius: 0 10px 10px 0; padding: 12px 16px; margin: 8px 0; }
+        .script-block p { font-size: 15px; line-height: 1.7; color: rgba(220,235,255,0.9); font-style: italic; }
+        .note-list { list-style: none; padding: 0; }
+        .note-list li { font-size: 15px; line-height: 1.65; color: rgba(220,235,255,0.88); padding: 5px 0 5px 22px; position: relative; border-bottom: 1px solid rgba(100,160,255,0.06); }
+        .note-list li:last-child { border-bottom: none; }
+        .note-list li::before { content: '→'; position: absolute; left: 0; color: var(--blue); font-weight: 600; }
+        .note-list li strong { color: var(--text); font-weight: 600; }
+        .alert { border-radius: 10px; padding: 12px 16px; margin: 10px 0; font-size: 14px; line-height: 1.6; }
+        .alert-tip { background: rgba(52,211,153,0.1); border: 1px solid rgba(52,211,153,0.2); color: #6ee7b7; }
+        .alert-warn { background: rgba(251,191,36,0.1); border: 1px solid rgba(251,191,36,0.2); color: #fde68a; }
+        .alert-key { background: rgba(167,139,250,0.1); border: 1px solid rgba(167,139,250,0.2); color: #c4b5fd; }
+        .alert-red { background: rgba(248,113,113,0.1); border: 1px solid rgba(248,113,113,0.2); color: #fca5a5; }
+        .divider { text-align: center; font-size: 11px; font-weight: 600; letter-spacing: 2px; color: var(--muted); margin: 24px 0 8px; text-transform: uppercase; }
+        .footer { text-align: center; padding: 24px 0 32px; font-size: 13px; color: var(--muted); }
+        .example-box { background: rgba(34,211,238,0.06); border: 1px solid rgba(34,211,238,0.15); border-radius: 10px; padding: 12px 16px; margin: 8px 0; }
+        .example-box .label { font-size: 10px; font-weight: 700; letter-spacing: 1.5px; color: var(--cyan); margin-bottom: 6px; text-transform: uppercase; }
+        .example-box p { font-size: 14px; line-height: 1.65; color: rgba(220,235,255,0.85); }
+    </style>
+</head>
+<body>
+
+<div class="header">
+    <h1>📝 Catatan Speaker</h1>
+    <p>R. Hari Setiawan, S.Kom., M.M. · HIMAKSI Seminar Nasional · 11 Juni 2026</p>
+</div>
+
+<!-- Timer -->
+<div class="timer-bar">
+    <div>
+        <div class="timer-label">⏱ Waktu Berjalan</div>
+        <div class="timer-display" id="timerDisplay">00:00</div>
+    </div>
+    <div class="timer-btns">
+        <button onclick="startStop()">▶ / ⏸</button>
+        <button onclick="resetTimer()">↺ Reset</button>
+    </div>
+</div>
+
+<!-- SLIDE 1 -->
+<div class="slide-card s1">
+    <div class="slide-header">
+        <div class="slide-num">Slide 1 / 8</div>
+        <div class="slide-time">~2 menit</div>
+    </div>
+    <div class="slide-title-note">🎤 Cover — Opening</div>
+
+    <div class="note-section">
+        <div class="note-section-label">Buka dengan pertanyaan</div>
+        <div class="script-block">
+            <p>"Sebelum mulai, boleh saya tanya dulu — siapa di sini yang dalam 1 minggu terakhir sudah pakai ChatGPT atau tools AI lainnya? Coba angkat tangan!"</p>
+        </div>
+    </div>
+
+    <div class="note-section">
+        <div class="note-section-label">Bridging untuk audiens lintas jurusan</div>
+        <div class="script-block">
+            <p>"Meskipun seminar ini dari HIMAKSI, insights hari ini berlaku untuk semua jurusan — karena AI tidak mengenal batas jurusan."</p>
+        </div>
+    </div>
+
+    <div class="note-section">
+        <div class="note-section-label">Transisi</div>
+        <div class="script-block">
+            <p>"Hari ini saya tidak bicara teori — saya cerita dari pengalaman nyata."</p>
+        </div>
+    </div>
+</div>
+
+<!-- SLIDE 2 -->
+<div class="slide-card s2">
+    <div class="slide-header">
+        <div class="slide-num">Slide 2 / 8</div>
+        <div class="slide-time">~3 menit</div>
+    </div>
+    <div class="slide-title-note">👥 Dua Perspektif, Satu Gambar Utuh</div>
+
+    <div class="note-section">
+        <div class="note-section-label">Positioning diri</div>
+        <ul class="note-list">
+            <li>Kak Angga = ahli teori & riset AI (sudah konfirmasi langsung)</li>
+            <li>Pak Hari = praktisi, pengguna AI aktif di dunia kerja nyata</li>
+        </ul>
+    </div>
+
+    <div class="note-section">
+        <div class="note-section-label">Kalimat kunci</div>
+        <div class="script-block">
+            <p>"Saya bukan ahli AI — saya pengguna AI. Dan justru itu yang mau saya share hari ini."</p>
+        </div>
+    </div>
+</div>
+
+<!-- SLIDE 3 — HATI-HATI -->
+<div class="slide-card s3">
+    <div class="slide-header">
+        <div class="slide-num">Slide 3 / 8</div>
+        <div class="slide-time">~3 menit ⚠️</div>
+    </div>
+    <div class="slide-title-note">🌍 Sinyal Dunia Nyata — Jensen Huang</div>
+
+    <div class="alert alert-red">
+        ⚠️ HATI-HATI: Ada audiens SI / TI di ruangan. Framing kutipan Jensen SANGAT penting. Ikuti script di bawah dengan urutan ini.
+    </div>
+
+    <div class="note-section">
+        <div class="note-section-label">Step 1 — Perkenalkan Jensen dulu</div>
+        <div class="script-block">
+            <p>"Jensen Huang adalah CEO Nvidia — perusahaan yang membuat chip yang menjalankan hampir semua AI di dunia saat ini. Nvidia mencapai market cap USD 5 triliun. Ini bukan orang biasa."</p>
+        </div>
+    </div>
+
+    <div class="note-section">
+        <div class="note-section-label">Step 2 — Bacakan kutipan</div>
+        <div class="script-block">
+            <p>"Di sebuah wawancara, Jensen bilang: 'Kalau saya sekarang berusia 20 tahun, mungkin saya akan memilih ilmu fisika daripada software.'"</p>
+        </div>
+    </div>
+
+    <div class="note-section">
+        <div class="note-section-label">Step 3 — Jelaskan konteks 3 gelombang AI</div>
+        <ul class="note-list">
+            <li><strong>Perceptual AI (2012):</strong> Mesin bisa "lihat & dengar" — contoh: Face ID di HP, filter wajah Instagram, Google Photos yang bisa kenali wajah orang</li>
+            <li><strong>Generative AI (sekarang):</strong> ChatGPT, Gemini, Claude — AI bisa nulis, ngobrol, analisis, coding. Ini yang kita pakai sekarang</li>
+            <li><strong>Physical AI (masa depan):</strong> AI ditanamkan ke robot & mesin nyata — harus ngerti fisika dunia nyata (gravitasi, material, dll). Makanya Jensen bilang fisika penting</li>
+        </ul>
+    </div>
+
+    <div class="note-section">
+        <div class="note-section-label">Step 4 — BRIDGING KRITIS (jangan sampai skip!)</div>
+        <div class="script-block">
+            <p>"Tapi perlu saya garis bawahi — Jensen bukan bilang software tidak penting. Bahkan Nvidia sendiri dibangun di atas software. Yang Jensen maksud: di era AI yang semakin canggih, yang paling kompetitif adalah orang yang punya domain expertise di bidangnya — ditambah kemampuan berkolaborasi dengan AI."</p>
+        </div>
+        <div class="script-block">
+            <p>"Jadi kalau kalian akuntansi — akuntansi kalian + AI = powerful. Kalau kalian sistem informasi — justru kalian punya keunggulan karena sudah berpikir sistematis. Kalau manajemen — judgment bisnis kalian + AI = luar biasa. AI adalah multiplier, bukan pengganti."</p>
+        </div>
+    </div>
+
+    <div class="alert alert-warn">
+        ⏱ Max 3 menit di slide ini! Ini konteks, bukan inti. Jangan sampai terlalu dalam bahas fisika vs software.
+    </div>
+</div>
+
+<!-- SLIDE 4 -->
+<div class="slide-card s4">
+    <div class="slide-header">
+        <div class="slide-num">Slide 4 / 8</div>
+        <div class="slide-time">~7 menit ⭐ CORE</div>
+    </div>
+    <div class="slide-title-note">💼 AI di Pekerjaan Saya Sehari-hari</div>
+
+    <div class="alert alert-key">
+        🎯 INI SLIDE TERPENTING. 7 menit penuh. Ceritakan secara naratif, bukan sekedar baca poin.
+    </div>
+
+    <div class="note-section">
+        <div class="note-section-label">1. Manajemen Tim — cerita 1-on-1</div>
+        <div class="example-box">
+            <div class="label">Ceritakan ini (before/after yang nyata)</div>
+            <p>"Dulu waktu saya 1-on-1 sama anggota tim, saya harus rekam meeting-nya, lalu saya putar ulang beberapa kali sambil nulis catatan. Bisa habis 2-3 jam hanya untuk review satu meeting. Sekarang? Ada transcript otomatis, langsung saya masukkan ke AI, dan dalam 15 menit saya sudah dapat: ringkasan isu utama, action items, dan pola masalah yang muncul berulang. Kalau ada yang perlu eskalasi ke CEO, saya sudah punya datanya."</p>
+        </div>
+        <div class="note-section-label" style="margin-top:10px;">Angka kunci</div>
+        <ul class="note-list">
+            <li>Dari 2-3 jam review manual → <strong>15 menit</strong></li>
+        </ul>
+    </div>
+
+    <div class="note-section">
+        <div class="note-section-label">2. Pembuatan Dokumen</div>
+        <div class="example-box">
+            <div class="label">Contoh nyata</div>
+            <p>"SOP untuk tim, proposal ke klien baru, brief project — dulu dari nol bisa 2-3 hari karena harus riset, draft, revisi berulang. Sekarang saya beri konteks ke AI, dapat draft awal dalam hitungan menit, tinggal saya review dan polish. 2-3 hari jadi 2-4 jam."</p>
+        </div>
+    </div>
+
+    <div class="note-section">
+        <div class="note-section-label">3. QA Website</div>
+        <div class="example-box">
+            <div class="label">Contoh nyata</div>
+            <p>"AI bantu generate checklist testing yang sistematis — responsivitas, broken links, form validation. Dulu banyak yang kelewatan karena manual dan capek. Sekarang miss-check turun drastis — sekitar 80%."</p>
+        </div>
+    </div>
+
+    <div class="note-section">
+        <div class="note-section-label">4. Email Klien</div>
+        <div class="example-box">
+            <div class="label">Contoh nyata</div>
+            <p>"Klien kami di Amerika, jadi email harus profesional dalam bahasa Inggris. Dulu 30 menit per email — harus mikir tone, pilih kata, grammar check. Sekarang 5 menit — saya kasih poin-poin ke AI, dapat draft yang langsung bisa dipakai."</p>
+        </div>
+    </div>
+
+    <div class="note-section">
+        <div class="note-section-label">Penutup slide</div>
+        <div class="script-block">
+            <p>"AI bukan menggantikan saya — AI membantu saya bekerja lebih cepat, lebih akurat, dan lebih strategic. Keputusan tetap di tangan manusia."</p>
+        </div>
+    </div>
+</div>
+
+<!-- SLIDE 5 -->
+<div class="slide-card s5">
+    <div class="slide-header">
+        <div class="slide-num">Slide 5 / 8</div>
+        <div class="slide-time">~6 menit</div>
+    </div>
+    <div class="slide-title-note">🚀 Peluang AI untuk Semua Profesi</div>
+
+    <div class="note-section">
+        <div class="note-section-label">Contoh untuk setiap card</div>
+        <ul class="note-list">
+            <li><strong>Otomasi Rutin:</strong> "Rekonsiliasi bank yang biasa makan waktu seharian, sekarang AI bisa bantu identifikasi discrepancy dalam hitungan menit. Laporan mingguan yang format-nya sama bisa di-auto-generate."</li>
+            <li><strong>Analisis & Keputusan:</strong> "Misalnya data penjualan 3 bulan terakhir — AI bisa langsung kasih insight: produk mana yang trending, segmen mana yang turun, kapan peak season-nya. Yang sebelumnya butuh analis berhari-hari."</li>
+            <li><strong>Kreasi & Komunikasi:</strong> "Nulis proposal 10 halaman, buat konten LinkedIn, draft email formal — AI bisa jadi partner yang membantu polishing, bukan menggantikan ide kita."</li>
+            <li><strong>Efisiensi Dokumen:</strong> "Scan ratusan invoice, AI bisa kategorikan dan ekstrak data otomatis. Yang biasa dikerjakan tim 3 orang bisa dikerjakan 1 orang dengan bantuan AI."</li>
+            <li><strong>Dari Pelaksana → Advisor:</strong> "Akuntan yang bisa interpret data AI dan kasih rekomendasi strategis ke manajemen, jauh lebih berharga dari yang hanya input angka."</li>
+            <li><strong>Profesi Baru:</strong> "Coba buka LinkedIn sekarang, search 'AI Auditor' atau 'Prompt Engineer' — ada lowongan yang 5 tahun lalu belum ada namanya."</li>
+        </ul>
+    </div>
+
+    <div class="alert alert-tip">
+        💡 Tekankan: semua contoh ini berlaku lintas jurusan. Audiens SI, manajemen, akuntansi — semua relate.
+    </div>
+</div>
+
+<!-- SLIDE 6 -->
+<div class="slide-card s6">
+    <div class="slide-header">
+        <div class="slide-num">Slide 6 / 8</div>
+        <div class="slide-time">~4 menit</div>
+    </div>
+    <div class="slide-title-note">⚠️ Tantangan & Etika AI</div>
+
+    <div class="note-section">
+        <div class="note-section-label">Cerita nyata untuk "Over-Trust" (wajib diceritakan!)</div>
+        <div class="script-block">
+            <p>"Tahun 2023, ada pengacara di New York — namanya Steven Schwartz — yang pakai ChatGPT untuk riset hukum. AI-nya mengutip 6 kasus pengadilan sebagai referensi. Saat dicek di pengadilan, 6 kasus itu ternyata tidak pernah ada. Semuanya halusinasi AI. Pengacara itu kena sanksi dari pengadilan."</p>
+        </div>
+        <div class="script-block">
+            <p>"Bayangkan kalau hal yang sama terjadi di laporan keuangan, di proposal bisnis, atau di kontrak yang kalian buat. Ini bukan menakut-nakuti — ini pengingat bahwa AI adalah alat, dan tanggung jawab tetap ada di tangan kita."</p>
+        </div>
+    </div>
+
+    <div class="note-section">
+        <div class="note-section-label">Penutup slide — pesan etika</div>
+        <div class="script-block">
+            <p>"Gunakan AI secara bijak. Verifikasi selalu. Jaga privasi data — jangan input data sensitif klien atau perusahaan ke AI publik sembarangan."</p>
+        </div>
+    </div>
+</div>
+
+<!-- SLIDE 7 -->
+<div class="slide-card s7">
+    <div class="slide-header">
+        <div class="slide-num">Slide 7 / 8</div>
+        <div class="slide-time">~6 menit</div>
+    </div>
+    <div class="slide-title-note">🎯 Kesiapan — Langkah Konkret</div>
+
+    <div class="note-section">
+        <div class="note-section-label">Pembuka slide</div>
+        <div class="script-block">
+            <p>"Tools AI itu berkembang sangat cepat — tahun lalu berbeda dengan sekarang, tahun depan pasti berbeda lagi. Jadi yang perlu dikuasai bukan tool-nya, tapi cara berpikir menggunakannya."</p>
+        </div>
+    </div>
+
+    <div class="note-section">
+        <div class="note-section-label">Tahap 1 — Start Today</div>
+        <ul class="note-list">
+            <li>Tools gratis yang bisa dicoba langsung: <strong>ChatGPT, Gemini, Claude, Copilot</strong></li>
+            <li>"Skill yang AI tidak bisa gantikan: berpikir kritis, komunikasi yang baik, dan expertise di bidang kalian masing-masing. Itu yang perlu dikembangkan."</li>
+            <li>Kursus gratis: Google AI Essentials (bisa dicari di Google), Coursera "AI for Everyone" oleh Andrew Ng</li>
+        </ul>
+    </div>
+
+    <div class="note-section">
+        <div class="note-section-label">Tahap 2 — Semester Ini / Bulan Ini</div>
+        <ul class="note-list">
+            <li>"Coba integrasikan AI ke pekerjaan yang paling sering kalian lakukan. Bikin laporan? Pakai AI bantu draft. Presentasi? Coba Gamma.app. Proposal? Coba Tome."</li>
+            <li>"Mulai bikin portofolio kecil — analisis data tugas kuliah atau pekerjaan, buat visualisasi, dokumentasikan hasilnya."</li>
+            <li>"Dan biasakan verifikasi — jangan langsung copas output AI. Kalian yang bertanggung jawab atas hasilnya."</li>
+        </ul>
+    </div>
+
+    <div class="note-section">
+        <div class="note-section-label">Tahap 3 — Jangka Menengah</div>
+        <ul class="note-list">
+            <li>"Cari pengalaman — magang, project freelance, kerja — di tempat yang sudah pakai AI dalam operasional. Tanya saat interview: 'Apakah perusahaan ini sudah menggunakan AI tools?'"</li>
+            <li>"Bangun profil LinkedIn. Dokumentasikan setiap project yang pakai data dan AI. Ini yang akan membedakan kalian dari kandidat lain."</li>
+            <li>"Kuasai data storytelling — kemampuan menjelaskan angka dan insight ke orang yang tidak teknis. Ini skill yang sangat langka dan sangat dicari."</li>
+        </ul>
+    </div>
+
+    <div class="note-section">
+        <div class="note-section-label">Penutup</div>
+        <div class="script-block">
+            <p>"Mulai kecil, konsisten, dan dokumentasikan. Portofolio AI bisa dibangun mulai sekarang — tidak perlu nunggu lulus atau nunggu kerja dulu."</p>
+        </div>
+    </div>
+</div>
+
+<!-- SLIDE 8 -->
+<div class="slide-card s8">
+    <div class="slide-header">
+        <div class="slide-num">Slide 8 / 8</div>
+        <div class="slide-time">~2 menit</div>
+    </div>
+    <div class="slide-title-note">🙏 Closing — Terima Kasih</div>
+
+    <div class="note-section">
+        <div class="note-section-label">Bacakan 4 takeaway — pelan, ada jeda</div>
+        <ul class="note-list">
+            <li>AI Gelombang ke-2 sudah berdampak ke semua profesi — sekarang, bukan nanti</li>
+            <li>Yang pakai AI + cara berpikir kritis = lebih kompetitif dari yang tidak</li>
+            <li>Gunakan AI secara bijak, etis, dan bertanggung jawab — verifikasi selalu</li>
+            <li>Mulai sekarang — tools gratis ada, portofolio bisa dibangun hari ini</li>
+        </ul>
+    </div>
+
+    <div class="note-section">
+        <div class="note-section-label">Kalimat penutup</div>
+        <div class="script-block">
+            <p>"Terima kasih atas perhatiannya. Saya serahkan kembali ke moderator untuk sesi tanya jawab."</p>
+        </div>
+    </div>
+
+    <div class="alert alert-tip">
+        💡 Senyum, angguk ke moderator, duduk. Tenang — sudah selesai! 👏
+    </div>
+</div>
+
+<div class="divider">— Tips Q&A —</div>
+
+<div class="slide-card" style="border-color: rgba(167,139,250,0.2);">
+    <div style="font-size: 16px; font-weight: 700; color: var(--purple); margin-bottom: 14px;">💬 Cara Menjawab Pertanyaan Sulit</div>
+    <ul class="note-list">
+        <li><strong>Tidak tahu datanya:</strong> <em>"Pertanyaan bagus. Saya belum punya data spesifiknya, tapi dari pengalaman di lapangan saya..."</em></li>
+        <li><strong>Terlalu teknis:</strong> <em>"Ini lebih ke ranah riset yang mungkin lebih tepat dijawab Kak Angga — tapi dari sisi implementasi, yang saya alami..."</em></li>
+        <li><strong>Di luar konteks:</strong> <em>"Menarik pertanyaannya — ini agak di luar scope hari ini, tapi bisa kita diskusi setelah sesi ya."</em></li>
+        <li><strong>Pertanyaan jebakan / provokatif:</strong> Tarik napas, senyum, jawab: <em>"Perspektif yang menarik. Menurut saya..."</em></li>
+        <li>Max 2-3 menit per jawaban. Tutup selalu dengan kalimat positif dan actionable.</li>
+    </ul>
+</div>
+
+<div class="footer">📌 HIMAKSI Seminar Nasional · Universitas Gajayana Malang · 11 Juni 2026</div>
+
+<script>
+    let seconds = 0, running = false, interval = null;
+    function pad(n) { return n.toString().padStart(2, '0'); }
+    function updateDisplay() {
+        const m = Math.floor(seconds / 60), s = seconds % 60;
+        const el = document.getElementById('timerDisplay');
+        el.textContent = pad(m) + ':' + pad(s);
+        if (seconds >= 1800) el.style.color = '#f87171';
+        else if (seconds >= 1500) el.style.color = '#fbbf24';
+        else el.style.color = 'var(--cyan)';
+    }
+    function startStop() {
+        if (running) { clearInterval(interval); running = false; }
+        else { interval = setInterval(() => { seconds++; updateDisplay(); }, 1000); running = true; }
+    }
+    function resetTimer() { clearInterval(interval); running = false; seconds = 0; updateDisplay(); }
+</script>
+</body>
+</html>

@@ -1,0 +1,865 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI & Profesi Masa Depan — R. Hari Setiawan</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Playfair+Display:wght@700;800;900&display=swap" rel="stylesheet">
+    <style>
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --bg-primary: #060c1a;
+            --bg-card: #0c1630;
+            --accent-blue: #60a5fa;
+            --accent-cyan: #22d3ee;
+            --accent-purple: #a78bfa;
+            --accent-orange: #fbbf24;
+            --accent-red: #f87171;
+            --accent-green: #34d399;
+            --text-primary: #f8faff;
+            --text-secondary: rgba(220, 230, 255, 0.85);
+            --text-muted: rgba(170, 195, 240, 0.55);
+            --border: rgba(100, 160, 255, 0.12);
+        }
+
+        html, body {
+            width: 100%; height: 100%;
+            overflow: hidden;
+            background: var(--bg-primary);
+            font-family: 'Inter', -apple-system, sans-serif;
+            color: var(--text-primary);
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* ===== SLIDE CONTAINER ===== */
+        .presentation {
+            width: 100vw; height: 100vh;
+            position: relative; overflow: hidden;
+        }
+
+        .slide {
+            position: absolute; inset: 0;
+            display: flex; flex-direction: column;
+            justify-content: center; align-items: center;
+            padding: 50px 70px;
+            opacity: 0; transform: translateX(50px);
+            transition: opacity 0.45s ease, transform 0.45s ease;
+            pointer-events: none; overflow-y: auto;
+        }
+        .slide.active { opacity: 1; transform: translateX(0); pointer-events: auto; }
+        .slide.exit-left { opacity: 0; transform: translateX(-50px); }
+
+        /* ===== BACKGROUND ===== */
+        .bg-glow {
+            position: fixed; border-radius: 50%;
+            filter: blur(140px); pointer-events: none; z-index: 0;
+        }
+        .bg-glow-1 { width: 500px; height: 500px; background: rgba(96,165,250,0.07); top: -180px; right: -80px; }
+        .bg-glow-2 { width: 350px; height: 350px; background: rgba(167,139,250,0.06); bottom: -80px; left: -40px; }
+        .bg-glow-3 { width: 250px; height: 250px; background: rgba(34,211,238,0.04); top: 45%; left: 55%; }
+
+        .grid-bg {
+            position: fixed; inset: 0; z-index: 0; pointer-events: none;
+            background-image:
+                linear-gradient(rgba(96,165,250,0.025) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(96,165,250,0.025) 1px, transparent 1px);
+            background-size: 70px 70px;
+        }
+
+        /* ===== PROGRESS BAR ===== */
+        .progress-bar {
+            position: fixed; bottom: 0; left: 0; height: 3px; z-index: 100;
+            background: linear-gradient(90deg, var(--accent-blue), var(--accent-purple), var(--accent-cyan));
+            transition: width 0.4s ease;
+        }
+
+        /* ===== SLIDE COUNTER ===== */
+        .slide-counter {
+            position: fixed; bottom: 18px; right: 28px; z-index: 100;
+            font-size: 14px; font-weight: 500; color: var(--text-muted);
+        }
+        .slide-counter .current { color: var(--accent-blue); font-weight: 700; }
+
+        /* ===== NAV HINT ===== */
+        .nav-hint {
+            position: fixed; bottom: 18px; left: 28px; z-index: 100;
+            font-size: 12px; color: var(--text-muted);
+            opacity: 1; transition: opacity 2s ease;
+        }
+        .nav-hint.hidden { opacity: 0; }
+
+        /* ===== SPEAKER NOTES ===== */
+        .notes-panel {
+            position: fixed; bottom: 0; left: 0; right: 0; z-index: 200;
+            background: rgba(8, 14, 32, 0.97);
+            border-top: 1px solid var(--border);
+            padding: 20px 48px;
+            transform: translateY(100%); transition: transform 0.3s ease;
+            max-height: 32vh; overflow-y: auto;
+            backdrop-filter: blur(20px);
+        }
+        .notes-panel.visible { transform: translateY(0); }
+        .notes-panel h4 {
+            font-size: 11px; letter-spacing: 2px; text-transform: uppercase;
+            color: var(--accent-blue); margin-bottom: 10px;
+        }
+        .notes-panel p {
+            font-size: 15px; line-height: 1.8; color: var(--text-secondary);
+        }
+        .notes-toggle {
+            position: fixed; bottom: 18px; left: 50%; transform: translateX(-50%);
+            z-index: 100; background: rgba(96,165,250,0.12);
+            border: 1px solid rgba(96,165,250,0.2); border-radius: 8px;
+            padding: 7px 16px; font-size: 12px; color: var(--accent-blue);
+            cursor: pointer; font-family: 'Inter'; transition: all 0.2s;
+        }
+        .notes-toggle:hover { background: rgba(96,165,250,0.22); }
+
+        /* ===== TYPOGRAPHY ===== */
+        .slide-tag {
+            font-size: 13px; font-weight: 700; letter-spacing: 3px;
+            text-transform: uppercase; color: var(--accent-blue);
+            margin-bottom: 18px;
+        }
+
+        .slide-title {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(40px, 5vw, 62px);
+            font-weight: 800; line-height: 1.15;
+            margin-bottom: 10px;
+            background: linear-gradient(135deg, #fff 0%, #c7d8f5 100%);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .slide-subtitle {
+            font-size: clamp(16px, 1.8vw, 21px);
+            color: var(--text-secondary); font-weight: 300;
+            margin-bottom: 36px; font-style: italic;
+        }
+
+        /* ===== LAYOUT ===== */
+        .content-wrapper { width: 100%; max-width: 1200px; }
+
+        .two-col {
+            display: grid; grid-template-columns: 1fr 1fr;
+            gap: 24px; width: 100%; max-width: 1200px;
+        }
+
+        .three-col {
+            display: grid; grid-template-columns: 1fr 1fr 1fr;
+            gap: 20px; width: 100%; max-width: 1200px;
+        }
+
+        /* ===== CARDS ===== */
+        .card {
+            background: rgba(255,255,255,0.035);
+            border: 1px solid var(--border);
+            border-radius: 14px; padding: 22px 26px;
+            transition: transform 0.25s, border-color 0.25s;
+            text-align: left;
+        }
+        .card:hover {
+            transform: translateY(-2px);
+            border-color: rgba(96,165,250,0.3);
+        }
+
+        .card-icon { font-size: 30px; margin-bottom: 10px; display: block; }
+
+        .card-title {
+            font-size: 17px; font-weight: 700;
+            color: var(--text-primary); margin-bottom: 3px;
+        }
+
+        .card-title-en {
+            font-size: 12px; font-weight: 500;
+            color: var(--accent-blue); margin-bottom: 10px;
+            letter-spacing: 0.3px; opacity: 0.85;
+        }
+
+        .card-desc {
+            font-size: 15px; line-height: 1.7;
+            color: var(--text-secondary); font-weight: 400;
+        }
+
+        .card-stat {
+            font-size: 14px; font-weight: 600;
+            color: var(--accent-cyan); margin-top: 12px;
+            padding-top: 12px;
+            border-top: 1px solid var(--border);
+        }
+
+        /* ===== RISK BADGES ===== */
+        .risk-badge {
+            display: inline-block; font-size: 10px; font-weight: 700;
+            letter-spacing: 1.5px; padding: 4px 12px;
+            border-radius: 5px; margin-bottom: 10px;
+        }
+        .risk-high { background: rgba(248,113,113,0.15); color: #fca5a5; border: 1px solid rgba(248,113,113,0.25); }
+        .risk-medium { background: rgba(251,191,36,0.15); color: #fde68a; border: 1px solid rgba(251,191,36,0.2); }
+
+        /* ===== QUOTE ===== */
+        .quote-block {
+            background: linear-gradient(135deg, rgba(96,165,250,0.08), rgba(167,139,250,0.06));
+            border-left: 4px solid var(--accent-blue);
+            border-radius: 0 14px 14px 0;
+            padding: 32px 36px; margin: 0 auto 32px; max-width: 960px;
+        }
+        .quote-text {
+            font-size: clamp(20px, 2.2vw, 28px);
+            font-style: italic; line-height: 1.55;
+            color: var(--text-primary); font-weight: 300; margin-bottom: 14px;
+        }
+        .quote-author {
+            font-size: 14px; color: var(--text-muted); font-weight: 500;
+        }
+
+        /* ===== TIMELINE ===== */
+        .timeline {
+            display: flex; gap: 0; width: 100%; max-width: 960px; margin: 28px auto 0;
+        }
+        .timeline-item {
+            flex: 1; text-align: center;
+            padding: 22px 18px 18px; position: relative;
+            border-top: 2px solid rgba(96,165,250,0.18);
+        }
+        .timeline-item::before {
+            content: ''; position: absolute;
+            top: -6px; left: 50%; transform: translateX(-50%);
+            width: 10px; height: 10px; border-radius: 50%;
+            background: var(--bg-card);
+            border: 2px solid rgba(96,165,250,0.45);
+        }
+        .timeline-item.past::before { background: rgba(96,165,250,0.35); }
+        .timeline-item.current::before {
+            background: var(--accent-blue);
+            box-shadow: 0 0 14px rgba(96,165,250,0.5);
+            width: 12px; height: 12px; top: -7px;
+        }
+        .timeline-item.future::before { background: var(--bg-card); border-style: dashed; }
+
+        .timeline-era {
+            font-size: 11px; font-weight: 700; letter-spacing: 1px; margin-bottom: 5px;
+        }
+        .timeline-era.past-text { color: var(--text-muted); }
+        .timeline-era.current-text { color: var(--accent-blue); }
+        .timeline-era.future-text { color: var(--accent-purple); }
+
+        .timeline-name {
+            font-size: 18px; font-weight: 700;
+            color: var(--text-primary); margin-bottom: 4px;
+        }
+        .timeline-sub {
+            font-size: 13px; color: var(--text-secondary); line-height: 1.5;
+        }
+        .timeline-label {
+            display: inline-block; font-size: 10px; font-weight: 700;
+            letter-spacing: 1px; padding: 3px 10px;
+            border-radius: 5px; margin-top: 10px;
+        }
+        .label-past { background: rgba(100,160,255,0.1); color: var(--text-muted); }
+        .label-current { background: rgba(96,165,250,0.2); color: var(--accent-blue); }
+        .label-future { background: rgba(167,139,250,0.15); color: var(--accent-purple); }
+
+        /* ===== PERSPECTIVES ===== */
+        .perspective-grid {
+            display: grid; grid-template-columns: 1fr 48px 1fr;
+            gap: 0; align-items: center;
+            width: 100%; max-width: 960px;
+            margin: 0 auto;
+        }
+        .vs-badge {
+            width: 48px; height: 48px;
+            display: flex; align-items: center; justify-content: center;
+            background: rgba(96,165,250,0.12);
+            border: 1px solid rgba(96,165,250,0.25);
+            border-radius: 50%; font-size: 14px; font-weight: 700;
+            color: var(--accent-blue);
+        }
+        .perspective-card {
+            background: rgba(255,255,255,0.035);
+            border: 1px solid var(--border);
+            border-radius: 16px; padding: 32px; text-align: center;
+        }
+        .perspective-card .name {
+            font-size: 24px; font-weight: 700;
+            color: var(--text-primary); margin-bottom: 4px;
+        }
+        .perspective-card .role {
+            font-size: 14px; color: var(--text-secondary); margin-bottom: 6px;
+        }
+        .perspective-card .label {
+            font-size: 11px; font-weight: 700;
+            letter-spacing: 1.5px; margin: 14px 0 12px;
+        }
+        .perspective-card ul {
+            list-style: none; text-align: left; padding-left: 8px;
+        }
+        .perspective-card li {
+            font-size: 15px; color: var(--text-secondary);
+            padding: 4px 0; line-height: 1.6;
+        }
+        .perspective-card li::before { content: '→ '; color: var(--accent-blue); font-weight: 600; }
+        .perspective-left .label { color: var(--accent-purple); }
+        .perspective-right .label { color: var(--accent-cyan); }
+        .perspective-note {
+            grid-column: 1 / -1;
+            text-align: center; font-size: 15px;
+            color: var(--text-muted); font-style: italic;
+            margin-top: 24px;
+        }
+
+        /* ===== STEPS ===== */
+        .steps-grid {
+            display: grid; grid-template-columns: 1fr 1fr 1fr;
+            gap: 20px; width: 100%; max-width: 1200px;
+        }
+        .step-card {
+            background: rgba(255,255,255,0.025);
+            border: 1px solid var(--border);
+            border-radius: 14px; padding: 24px 22px;
+            position: relative; overflow: hidden; text-align: left;
+        }
+        .step-card::before {
+            content: ''; position: absolute;
+            top: 0; left: 0; right: 0; height: 3px;
+        }
+        .step-1::before { background: linear-gradient(90deg, var(--accent-blue), var(--accent-cyan)); }
+        .step-2::before { background: linear-gradient(90deg, var(--accent-purple), var(--accent-blue)); }
+        .step-3::before { background: linear-gradient(90deg, var(--accent-orange), var(--accent-red)); }
+
+        .step-num {
+            font-size: 11px; font-weight: 700;
+            letter-spacing: 2px; margin-bottom: 6px;
+        }
+        .step-1 .step-num { color: var(--accent-cyan); }
+        .step-2 .step-num { color: var(--accent-purple); }
+        .step-3 .step-num { color: var(--accent-orange); }
+
+        .step-title { font-size: 19px; font-weight: 700; margin-bottom: 14px; }
+
+        .step-list { list-style: none; }
+        .step-list li {
+            font-size: 14px; color: var(--text-secondary);
+            padding: 6px 0 6px 20px;
+            position: relative; line-height: 1.6;
+        }
+        .step-list li::before {
+            content: '✦'; position: absolute; left: 0;
+            color: var(--accent-blue); font-size: 11px; top: 8px;
+        }
+
+        /* ===== CLOSING ===== */
+        .takeaway-grid {
+            display: grid; grid-template-columns: 1fr 1fr;
+            gap: 18px; max-width: 960px; width: 100%;
+            margin-bottom: 36px;
+        }
+        .takeaway {
+            display: flex; align-items: flex-start; gap: 16px;
+            background: rgba(255,255,255,0.03);
+            border: 1px solid var(--border);
+            border-radius: 14px; padding: 20px 22px;
+        }
+        .takeaway-num {
+            width: 36px; height: 36px; flex-shrink: 0;
+            display: flex; align-items: center; justify-content: center;
+            background: linear-gradient(135deg, var(--accent-blue), var(--accent-purple));
+            border-radius: 8px; font-size: 16px; font-weight: 800;
+        }
+        .takeaway-text {
+            font-size: 16px; line-height: 1.6;
+            color: var(--text-secondary); font-weight: 400;
+        }
+
+        .qa-badge {
+            display: inline-flex; align-items: center; gap: 10px;
+            background: linear-gradient(135deg, rgba(96,165,250,0.14), rgba(167,139,250,0.1));
+            border: 1px solid rgba(96,165,250,0.22);
+            border-radius: 14px; padding: 16px 32px;
+            font-size: 20px; font-weight: 600;
+        }
+
+        .speaker-info {
+            font-size: 15px; color: var(--text-muted); margin-top: 28px;
+        }
+
+        .nvidia-note {
+            font-size: 12px; color: var(--text-muted);
+            text-align: center; margin-top: 18px; font-style: italic;
+        }
+
+        /* ===== COVER ===== */
+        .cover-meta {
+            display: flex; gap: 24px; align-items: center;
+            justify-content: center;
+            font-size: 15px; color: var(--text-muted); margin-top: 28px;
+        }
+        .cover-meta span { display: flex; align-items: center; gap: 8px; }
+
+        .cover-speaker {
+            font-size: 19px; color: var(--text-secondary);
+            margin-top: 20px; font-weight: 400;
+        }
+        .cover-speaker strong { color: var(--text-primary); font-weight: 600; }
+
+        /* ===== ETHICS FOOTER ===== */
+        .ethics-footer {
+            background: rgba(52,211,153,0.08);
+            border: 1px solid rgba(52,211,153,0.18);
+            border-radius: 14px; padding: 18px 28px;
+            max-width: 1200px; width: 100%;
+            margin-top: 22px; text-align: center;
+        }
+        .ethics-footer p {
+            font-size: 15px; color: rgba(52,211,153,0.85); font-weight: 500;
+        }
+
+        /* ===== READINESS NOTE ===== */
+        .readiness-note {
+            background: rgba(96,165,250,0.06);
+            border: 1px solid rgba(96,165,250,0.14);
+            border-radius: 14px; padding: 18px 28px;
+            max-width: 1200px; width: 100%; margin-bottom: 28px;
+        }
+        .readiness-note p {
+            font-size: 15px; color: var(--text-secondary);
+            font-style: italic; text-align: center; line-height: 1.7;
+        }
+
+        .closing-note {
+            font-size: 14px; color: var(--text-muted);
+            text-align: center; margin-top: 10px;
+        }
+
+        /* ===== ANIMATIONS ===== */
+        .slide.active .card,
+        .slide.active .takeaway,
+        .slide.active .step-card,
+        .slide.active .perspective-card,
+        .slide.active .timeline-item,
+        .slide.active .quote-block {
+            animation: fadeUp 0.5s ease forwards; opacity: 0;
+        }
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(16px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .slide.active .card:nth-child(1), .slide.active .takeaway:nth-child(1), .slide.active .step-card:nth-child(1), .slide.active .timeline-item:nth-child(1) { animation-delay: 0.08s; }
+        .slide.active .card:nth-child(2), .slide.active .takeaway:nth-child(2), .slide.active .step-card:nth-child(2), .slide.active .timeline-item:nth-child(2) { animation-delay: 0.16s; }
+        .slide.active .card:nth-child(3), .slide.active .takeaway:nth-child(3), .slide.active .step-card:nth-child(3), .slide.active .timeline-item:nth-child(3) { animation-delay: 0.24s; }
+        .slide.active .card:nth-child(4), .slide.active .takeaway:nth-child(4) { animation-delay: 0.32s; }
+        .slide.active .card:nth-child(5) { animation-delay: 0.4s; }
+        .slide.active .card:nth-child(6) { animation-delay: 0.48s; }
+    </style>
+
+</head>
+<body>
+    <div class="bg-glow bg-glow-1"></div>
+    <div class="bg-glow bg-glow-2"></div>
+    <div class="bg-glow bg-glow-3"></div>
+    <div class="grid-bg"></div>
+
+    <div class="progress-bar" id="progressBar"></div>
+    <div class="slide-counter"><span class="current" id="currentSlide">1</span> / <span id="totalSlides">8</span></div>
+    <div class="nav-hint" id="navHint">← → Navigasi Slide &nbsp;|&nbsp; F = Fullscreen</div>
+
+    <div class="presentation" id="presentation">
+
+        <!-- ==================== SLIDE 1: COVER ==================== -->
+        <div class="slide active" data-notes="Buka dengan salam, lalu tanya audiens: 'Siapa di sini yang dalam 1 minggu terakhir sudah pakai ChatGPT atau AI tools lainnya? Coba angkat tangan!' Tunggu respons. Lalu BRIDGING: 'Meskipun seminar ini diselenggarakan oleh HIMAKSI, insights hari ini berlaku untuk semua jurusan dan profesi — karena AI tidak mengenal batas jurusan. Jadi buat teman-teman dari jurusan apapun yang hadir, ini juga untuk kalian.' Lalu transisi: 'Hari ini saya tidak bicara teori — saya cerita dari pengalaman nyata.'">
+            <div class="content-wrapper" style="text-align:center;">
+                <div class="slide-tag">HIMAKSI Seminar Nasional · 11 Juni 2026</div>
+                <div class="slide-title">AI & Profesi<br>Masa Depan</div>
+                <div class="slide-subtitle">AI and Future Professions: Opportunities, Challenges, and Readiness</div>
+                <div class="cover-speaker">
+                    <strong>R. Hari Setiawan, S.Kom., M.M.</strong> &nbsp;|&nbsp; Director of Production — DeskTeam360
+                </div>
+                <div class="cover-meta">
+                    <span>📅 Kamis, 11 Juni 2026</span>
+                    <span>🕑 13.15 WIB</span>
+                    <span>📍 Aula MM Universitas Gajayana Malang</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- ==================== SLIDE 2: DUA PERSPEKTIF ==================== -->
+        <div class="slide" data-notes="Jelaskan posisi Pak Hari vs Kak Angga. Kak Angga = fondasi akademis/teori AI. Pak Hari = praktisi, pengguna AI aktif di dunia kerja nyata. Tekankan: 'Saya bukan ahli AI — saya pengguna AI. Dan justru itu yang mau saya share.'">
+            <div class="content-wrapper" style="text-align:center;">
+                <div class="slide-tag">Pembukaan</div>
+                <div class="slide-title">Dua Perspektif,<br>Satu Gambar Utuh</div>
+                <div class="slide-subtitle">Two Perspectives, One Complete Picture</div>
+
+                <div class="perspective-grid">
+                    <div class="perspective-card perspective-left">
+                        <div class="name">Kak Angga</div>
+                        <div class="role">M.Sc. Natural Language Processing — MBZUAI</div>
+                        <div class="label">FONDASI TEORITIS & AKADEMIS</div>
+                        <ul>
+                            <li>Cara kerja AI secara teknis</li>
+                            <li>Perkembangan riset AI global</li>
+                            <li>Masa depan teknologi AI</li>
+                        </ul>
+                    </div>
+                    <div class="vs-badge">+</div>
+                    <div class="perspective-card perspective-right">
+                        <div class="name">Pak Hari</div>
+                        <div class="role">Director of Production — DeskTeam360</div>
+                        <div class="label">PRAKTIS & DUNIA KERJA NYATA</div>
+                        <ul>
+                            <li>AI dipakai seperti apa di industri</li>
+                            <li>Dampak nyata ke profesi kalian</li>
+                            <li>Langkah konkret yang bisa dimulai</li>
+                        </ul>
+                    </div>
+                    <div class="perspective-note">Kak Angga sudah membangun fondasinya — sekarang kita lihat bagaimana AI bekerja di lapangan nyata.</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ==================== SLIDE 3: SINYAL DUNIA NYATA ==================== -->
+        <div class="slide" data-notes="Bacakan kutipan Jensen Huang dengan penekanan. Lalu jelaskan: 'Pesan ini bukan berarti kalian harus pindah jurusan. Pesannya: yang paling berharga ke depan adalah kemampuan memahami dunia nyata DAN berkolaborasi dengan AI. Itu berlaku untuk semua jurusan — termasuk akuntansi.' Jangan terlalu lama di slide ini, max 3 menit.">
+            <div class="content-wrapper" style="text-align:center;">
+                <div class="slide-tag">Sinyal dari Dunia Nyata</div>
+
+                <div class="quote-block" style="text-align:left;">
+                    <div class="quote-text">"Jika saya berusia 20 tahun sekarang, mungkin saya akan memilih ilmu fisika dibandingkan ilmu software."</div>
+                    <div class="quote-author">— Jensen Huang, CEO Nvidia &nbsp;|&nbsp; Pendiri &amp; CEO perusahaan chip AI terbesar di dunia</div>
+                </div>
+
+                <p style="font-size:16px; color:var(--text-secondary); max-width:860px; margin: 0 auto 28px; line-height:1.85; text-align:center;">
+                    AI adalah <strong style="color:var(--accent-blue);">multiplier</strong>, bukan pengganti.<br>
+                    <span style="color:var(--text-primary);">Akuntansi</span> + AI = powerful &nbsp;&nbsp;
+                    <span style="color:var(--text-primary);">Sistem Informasi</span> + AI = powerful &nbsp;&nbsp;
+                    <span style="color:var(--text-primary);">Manajemen</span> + AI = powerful.<br>
+                    <span style="color:rgba(200,220,255,0.65); font-size:14px;">Domain expertise di bidang kalian adalah aset — AI yang membuat aset itu berlipat ganda.</span>
+                </p>
+
+                <div class="slide-subtitle" style="margin-bottom:16px;">3 Gelombang AI — versi Jensen Huang</div>
+
+                <div class="timeline">
+                    <div class="timeline-item past">
+                        <div class="timeline-era past-text">2012</div>
+                        <div class="timeline-name">Perceptual AI</div>
+                        <div class="timeline-sub">Mesin mengenali gambar & suara.<br>Deep learning mulai mainstream.</div>
+                        <span class="timeline-label label-past">SUDAH LEWAT</span>
+                    </div>
+                    <div class="timeline-item current">
+                        <div class="timeline-era current-text">Sekarang</div>
+                        <div class="timeline-name">Generative AI</div>
+                        <div class="timeline-sub">ChatGPT, Claude, Gemini — AI bisa menulis, coding, analisis data.</div>
+                        <span class="timeline-label label-current">KITA ADA DI SINI</span>
+                    </div>
+                    <div class="timeline-item future">
+                        <div class="timeline-era future-text">Masa Depan</div>
+                        <div class="timeline-name">Physical AI</div>
+                        <div class="timeline-sub">AI diintegrasikan ke robot & mesin. Memahami hukum fisika dunia nyata.</div>
+                        <span class="timeline-label label-future">NEXT WAVE</span>
+                    </div>
+                </div>
+                <div class="nvidia-note">Nvidia: Perusahaan pertama di dunia yang mencapai market cap USD 5 triliun (Oktober 2025)</div>
+            </div>
+        </div>
+
+        <!-- ==================== SLIDE 4: AI DI PEKERJAAN ==================== -->
+        <div class="slide" data-notes="Ini CORE SLIDE — alokasikan 7 menit. Ceritakan setiap poin dengan contoh nyata dari pengalaman. Tekankan angka konkret di setiap poin. Tutup dengan: 'AI bukan menggantikan saya — AI membantu saya bekerja lebih cepat, lebih akurat, dan lebih strategic. Keputusan tetap di tangan manusia.'">
+            <div class="content-wrapper" style="text-align:center;">
+                <div class="slide-tag">Studi Kasus Nyata</div>
+                <div class="slide-title" style="font-size:clamp(30px,3.5vw,44px);">AI di Pekerjaan Saya<br>Sehari-hari</div>
+                <div class="slide-subtitle">DeskTeam360 — Digital agency di Malang, klien B2B di AS. Tim: 26 orang, 70+ klien aktif.</div>
+
+                <div class="two-col">
+                    <div class="card">
+                        <span class="card-icon">🧑‍💼</span>
+                        <div class="card-title">Manajemen Tim</div>
+                        <div class="card-title-en">Team Management</div>
+                        <div class="card-desc">Analisis transcript meeting 1-on-1 dengan AI — identifikasi pola masalah sebelum eskalasi ke CEO.</div>
+                        <div class="card-stat">⏱ Dari 2-3 jam review manual → 15 menit</div>
+                    </div>
+                    <div class="card">
+                        <span class="card-icon">📄</span>
+                        <div class="card-title">Pembuatan Dokumen</div>
+                        <div class="card-title-en">Document Creation</div>
+                        <div class="card-desc">SOP, proposal, brief klien — AI mempercepat draft awal, tinggal review dan polish.</div>
+                        <div class="card-stat">⏱ Dari 2-3 hari → 2-4 jam</div>
+                    </div>
+                    <div class="card">
+                        <span class="card-icon">🔍</span>
+                        <div class="card-title">Review & QA</div>
+                        <div class="card-title-en">Website Quality Assurance</div>
+                        <div class="card-desc">AI bantu generate checklist testing, analisis responsivitas, dan identifikasi bug secara sistematis.</div>
+                        <div class="card-stat">📉 Mengurangi miss-check hingga 80%</div>
+                    </div>
+                    <div class="card">
+                        <span class="card-icon">✉️</span>
+                        <div class="card-title">Komunikasi Klien</div>
+                        <div class="card-title-en">Client Communication</div>
+                        <div class="card-desc">Drafting email update klien yang lebih profesional dan milestone-driven dengan bantuan AI.</div>
+                        <div class="card-stat">⏱ Dari 30 menit per email → 5 menit</div>
+                    </div>
+                </div>
+
+                <p style="font-size:16px; color:var(--accent-cyan); margin-top:24px; font-weight:500;">
+                    AI bukan menggantikan saya — AI membantu saya bekerja lebih cepat, lebih akurat, dan lebih strategic.
+                </p>
+            </div>
+        </div>
+
+        <!-- ==================== SLIDE 5: PELUANG ==================== -->
+        <div class="slide" data-notes="6 menit. Tekankan bahwa peluang ini berlaku untuk SEMUA profesi, bukan hanya akuntansi. Untuk setiap card, berikan contoh lisan yang relevan. Untuk 'Profesi Baru', bilang: 'Coba buka LinkedIn, search AI Auditor atau Prompt Engineer — kalian akan lihat lowongan yang 5 tahun lalu belum ada.' Untuk card akuntansi, bilang: 'Khusus untuk teman-teman dari akuntansi, ini bonus poin dari saya...'">
+            <div class="content-wrapper" style="text-align:center;">
+                <div class="slide-tag">Opportunities</div>
+                <div class="slide-title" style="font-size:clamp(28px,3.2vw,40px);">Peluang AI untuk<br>Semua Profesi</div>
+                <div class="slide-subtitle">AI bukan musuh, tapi multiplier yang powerful — apapun jurusan kalian</div>
+
+                <div class="three-col">
+                    <div class="card">
+                        <span class="card-icon">⚡</span>
+                        <div class="card-title">Otomasi Pekerjaan Rutin</div>
+                        <div class="card-title-en">Automated Workflows</div>
+                        <div class="card-desc">Laporan, data entry, rekonsiliasi, administrasi — pekerjaan repetitif di semua bidang bisa dipercepat drastis dengan AI.</div>
+                    </div>
+                    <div class="card">
+                        <span class="card-icon">🧠</span>
+                        <div class="card-title">Analisis & Pengambilan Keputusan</div>
+                        <div class="card-title-en">AI-Powered Decision Making</div>
+                        <div class="card-desc">AI bantu analisis data besar, deteksi pola, dan prediksi tren — dari keuangan, marketing, hingga supply chain.</div>
+                    </div>
+                    <div class="card">
+                        <span class="card-icon">✍️</span>
+                        <div class="card-title">Kreasi & Komunikasi</div>
+                        <div class="card-title-en">Content & Communication</div>
+                        <div class="card-desc">Copywriting, presentasi, proposal, email profesional — AI mempercepat proses kreatif di semua industri.</div>
+                    </div>
+                    <div class="card">
+                        <span class="card-icon">📋</span>
+                        <div class="card-title">Efisiensi Dokumen</div>
+                        <div class="card-title-en">Document Intelligence</div>
+                        <div class="card-desc">Ekstrak, ringkas, dan kategorikan data dari kontrak, invoice, jurnal, dan dokumen bisnis secara otomatis.</div>
+                    </div>
+                    <div class="card">
+                        <span class="card-icon">🎯</span>
+                        <div class="card-title">Dari Pelaksana → Advisor</div>
+                        <div class="card-title-en">From Executor to Strategic Advisor</div>
+                        <div class="card-desc">Profesional masa depan bukan sekadar menjalankan tugas, tapi interpreter insight AI untuk pengambilan keputusan.</div>
+                    </div>
+                    <div class="card">
+                        <span class="card-icon">🚀</span>
+                        <div class="card-title">Profesi Baru Bermunculan</div>
+                        <div class="card-title-en">Emerging Roles</div>
+                        <div class="card-desc">Prompt Engineer, AI Auditor, Data Storyteller, AI Ethics Officer — profesi yang 5 tahun lalu belum ada.</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ==================== SLIDE 6: TANTANGAN ==================== -->
+        <div class="slide" data-notes="4 menit. Ceritakan kasus pengacara Steven Schwartz di New York saat menjelaskan Over-Trust: 'AI mengutip 6 kasus pengadilan yang semuanya tidak pernah ada. Bayangkan kalau itu terjadi di laporan keuangan, kontrak hukum, atau proposal bisnis.' Tutup dengan pesan etika: 'Gunakan AI secara bijak, verifikasi selalu.'">
+            <div class="content-wrapper" style="text-align:center;">
+                <div class="slide-tag">Challenges & Ethics</div>
+                <div class="slide-title" style="font-size:clamp(28px,3.2vw,40px);">Tantangan & Etika<br>Penggunaan AI</div>
+                <div class="slide-subtitle">The Real Ones — bukan sekadar teori</div>
+
+                <div class="two-col">
+                    <div class="card">
+                        <span class="risk-badge risk-high">HIGH RISK</span>
+                        <div class="card-title">Transformasi Peran Entry-Level</div>
+                        <div class="card-desc">Pekerjaan rutin (input data, rekonsiliasi manual) mulai bertransformasi. Yang tidak beradaptasi akan sulit bersaing.</div>
+                    </div>
+                    <div class="card">
+                        <span class="risk-badge risk-medium">MEDIUM RISK</span>
+                        <div class="card-title">AI Literacy Gap</div>
+                        <div class="card-desc">Banyak fresh graduate belum tahu cara pakai AI tools untuk kerja. Ini bukan soal coding — tapi soal workflow dan prompt.</div>
+                    </div>
+                    <div class="card">
+                        <span class="risk-badge risk-high">HIGH RISK</span>
+                        <div class="card-title">Bahaya Over-Trust pada AI</div>
+                        <div class="card-desc">AI bisa salah (hallucination). Profesional yang tidak kritis terhadap output AI bisa menghasilkan laporan atau keputusan yang keliru.</div>
+                    </div>
+                    <div class="card">
+                        <span class="risk-badge risk-medium">MEDIUM RISK</span>
+                        <div class="card-title">Persaingan Semakin Ketat</div>
+                        <div class="card-desc">Lowongan pekerjaan rutin berkurang. Diferensiasi skill dan portofolio jadi semakin penting untuk menonjol.</div>
+                    </div>
+                </div>
+
+                <div class="ethics-footer">
+                    <p>🛡️ Gunakan AI secara bijak, etis, dan bertanggung jawab — verifikasi output, jaga privasi data, dan jangan gunakan AI untuk menipu atau menyesatkan.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- ==================== SLIDE 7: KESIAPAN ==================== -->
+        <div class="slide" data-notes="6 menit. Ini slide paling actionable. Tekankan: 'Tools AI itu seperti balapan — yang perlu dikuasai bukan tool-nya, tapi cara berpikir menggunakannya.' Sebutkan nama tools gratis spesifik. Tutup dengan: 'Mulai kecil, konsisten, dan dokumentasikan. Portofolio AI bisa dibangun dari kampus — mulai sekarang.'">
+            <div class="content-wrapper" style="text-align:center;">
+                <div class="slide-tag">Readiness</div>
+                <div class="slide-title" style="font-size:clamp(28px,3.2vw,40px);">Kesiapan — Langkah<br>Konkret Mulai Sekarang</div>
+                <div class="slide-subtitle">What Can You Do Now?</div>
+
+                <div class="readiness-note">
+                    <p>💡 Tools AI itu seperti balapan — tahun lalu berbeda, tahun ini berbeda, tahun depan kita tidak tahu. Yang perlu dikuasai bukan tool-nya, tapi cara berpikir menggunakannya.</p>
+                </div>
+
+                <div class="steps-grid">
+                    <div class="step-card step-1">
+                        <div class="step-num">TAHAP 1 — MULAI SEKARANG</div>
+                        <div class="step-title">Start Today</div>
+                        <ul class="step-list">
+                            <li>Eksplorasi AI tools gratis: <strong>ChatGPT, Google Gemini, Claude, Microsoft Copilot</strong></li>
+                            <li>Kuasai skill yang AI <em>tidak bisa gantikan</em>: <strong>berpikir kritis, komunikasi, dan domain expertise di bidangmu</strong></li>
+                            <li>Ikuti kursus gratis: Google AI Essentials atau Coursera AI for Everyone</li>
+                        </ul>
+                    </div>
+                    <div class="step-card step-2">
+                        <div class="step-num">TAHAP 2 — JANGKA PENDEK</div>
+                        <div class="step-title">This Month</div>
+                        <ul class="step-list">
+                            <li>Coba integrasikan AI tools ke dalam alur kerja produktivitas sehari-hari — mulai dari yang paling sederhana</li>
+                            <li>Bangun portofolio kecil berbasis data — lakukan analisis dan visualisasi untuk mendapatkan insight baru</li>
+                            <li>Biasakan verifikasi output AI — AI bisa salah, kamu yang bertanggung jawab penuh atas hasilnya</li>
+                        </ul>
+                    </div>
+                    <div class="step-card step-3">
+                        <div class="step-num">TAHAP 3 — JANGKA MENENGAH</div>
+                        <div class="step-title">Next Step</div>
+                        <ul class="step-list">
+                            <li>Cari pengalaman (magang / project / kerja) di tempat yang sudah integrasikan AI dalam operasional sehari-hari</li>
+                            <li>Bangun profil profesional, dokumentasikan setiap project yang melibatkan data &amp; AI</li>
+                            <li>Kuasai <strong>data storytelling</strong> — kemampuan menjelaskan angka &amp; insight ke orang non-teknis = nilai jual utama</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <p style="font-size:16px; color:var(--accent-cyan); margin-top:20px; font-weight:500;">
+                    Mulai kecil, konsisten, dan dokumentasikan. Portofolio AI bisa dibangun mulai sekarang.
+                </p>
+            </div>
+        </div>
+
+        <!-- ==================== SLIDE 8: CLOSING ==================== -->
+        <div class="slide" data-notes="2 menit. Baca 4 takeaway dengan jeda antar poin. Lalu: 'Terima kasih atas perhatiannya. Saya serahkan kembali ke moderator untuk sesi tanya jawab.' Senyum, angguk ke moderator, duduk.">
+            <div class="content-wrapper" style="text-align:center;">
+                <div class="slide-tag">Closing</div>
+                <div class="slide-title">Terima Kasih!</div>
+                <div class="slide-subtitle">Thank you for your attention</div>
+
+                <div class="takeaway-grid">
+                    <div class="takeaway">
+                        <div class="takeaway-num">01</div>
+                        <div class="takeaway-text">AI Gelombang ke-2 sudah berdampak ke <strong>semua profesi</strong> — sekarang, bukan nanti.</div>
+                    </div>
+                    <div class="takeaway">
+                        <div class="takeaway-num">02</div>
+                        <div class="takeaway-text">Yang pakai AI + <strong>cara berpikir kritis</strong> akan jauh lebih kompetitif dari yang tidak.</div>
+                    </div>
+                    <div class="takeaway">
+                        <div class="takeaway-num">03</div>
+                        <div class="takeaway-text">Gunakan AI secara <strong>bijak, etis, dan bertanggung jawab</strong> — verifikasi selalu.</div>
+                    </div>
+                    <div class="takeaway">
+                        <div class="takeaway-num">04</div>
+                        <div class="takeaway-text"><strong>Mulai sekarang.</strong> Tools gratis ada. Portofolio bisa dibangun mulai hari ini.</div>
+                    </div>
+                </div>
+
+                <div class="qa-badge">💬 SESI TANYA JAWAB / Q&A SESSION</div>
+
+                <div class="speaker-info">
+                    R. Hari Setiawan, S.Kom., M.M. &nbsp;|&nbsp; Director of Production — DeskTeam360
+                </div>
+                <div class="closing-note">
+                    Universitas Gajayana Malang &nbsp;·&nbsp; HIMAKSI Seminar Nasional 2026 &nbsp;·&nbsp; 11 Juni 2026
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <script>
+        const slides = document.querySelectorAll('.slide');
+        const totalSlides = slides.length;
+        let currentIndex = 0;
+
+        document.getElementById('totalSlides').textContent = totalSlides;
+
+        function goToSlide(index) {
+            if (index < 0 || index >= totalSlides || index === currentIndex) return;
+
+            const currentSlide = slides[currentIndex];
+            const nextSlide = slides[index];
+
+            if (index > currentIndex) {
+                currentSlide.classList.remove('active');
+                currentSlide.classList.add('exit-left');
+                nextSlide.style.transform = 'translateX(60px)';
+            } else {
+                currentSlide.classList.remove('active');
+                currentSlide.style.transform = 'translateX(60px)';
+                nextSlide.classList.add('exit-left');
+            }
+
+            setTimeout(() => {
+                currentSlide.classList.remove('exit-left');
+                currentSlide.style.transform = '';
+                nextSlide.classList.remove('exit-left');
+                nextSlide.classList.add('active');
+                nextSlide.style.transform = '';
+            }, 50);
+
+            currentIndex = index;
+            document.getElementById('currentSlide').textContent = currentIndex + 1;
+            document.getElementById('progressBar').style.width = ((currentIndex + 1) / totalSlides * 100) + '%';
+
+            // Hide nav hint after first navigation
+            document.getElementById('navHint').classList.add('hidden');
+        }
+
+        // Keyboard navigation
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight' || e.key === 'ArrowDown' || e.key === ' ' || e.key === 'PageDown') {
+                e.preventDefault();
+                goToSlide(currentIndex + 1);
+            } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp' || e.key === 'PageUp') {
+                e.preventDefault();
+                goToSlide(currentIndex - 1);
+            } else if (e.key === 'Home') {
+                goToSlide(0);
+            } else if (e.key === 'End') {
+                goToSlide(totalSlides - 1);
+            } else if (e.key === 'f' || e.key === 'F') {
+                if (!document.fullscreenElement) {
+                    document.documentElement.requestFullscreen();
+                } else {
+                    document.exitFullscreen();
+                }
+            }
+        });
+
+        // Click navigation (left half = prev, right half = next)
+        document.getElementById('presentation').addEventListener('click', (e) => {
+            if (e.target.closest('button') || e.target.closest('a')) return;
+            const x = e.clientX;
+            const w = window.innerWidth;
+            if (x > w * 0.65) goToSlide(currentIndex + 1);
+            else if (x < w * 0.35) goToSlide(currentIndex - 1);
+        });
+
+        // Touch swipe support
+        let touchStartX = 0;
+        document.addEventListener('touchstart', e => { touchStartX = e.touches[0].clientX; });
+        document.addEventListener('touchend', e => {
+            const diff = touchStartX - e.changedTouches[0].clientX;
+            if (Math.abs(diff) > 50) {
+                if (diff > 0) goToSlide(currentIndex + 1);
+                else goToSlide(currentIndex - 1);
+            }
+        });
+
+        // Initialize progress bar
+        document.getElementById('progressBar').style.width = (1 / totalSlides * 100) + '%';
+    </script>
+</body>
+</html>
