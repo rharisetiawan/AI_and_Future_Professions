@@ -1,0 +1,588 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>❓ FAQ — Antisipasi Pertanyaan Audience</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        :root {
+            --bg: #0f172a; --card: #1e293b; --border: rgba(100,160,255,0.12);
+            --blue: #60a5fa; --cyan: #22d3ee; --green: #34d399;
+            --orange: #fbbf24; --purple: #a78bfa; --red: #f87171;
+            --text: #f1f5f9; --muted: rgba(200,220,255,0.55);
+        }
+        body { background: var(--bg); font-family: 'Inter', sans-serif; color: var(--text); padding: 20px; max-width: 900px; margin: 0 auto; }
+
+        .header { text-align: center; padding: 28px 16px 20px; border-bottom: 1px solid var(--border); margin-bottom: 28px; }
+        .header h1 { font-size: 22px; font-weight: 700; color: var(--blue); margin-bottom: 6px; }
+        .header p { font-size: 13px; color: var(--muted); line-height: 1.7; }
+
+        .category-label {
+            font-size: 10px; font-weight: 700; letter-spacing: 2px;
+            text-transform: uppercase; color: var(--muted);
+            margin: 28px 0 12px; padding-left: 4px;
+            display: flex; align-items: center; gap: 10px;
+        }
+        .category-label::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+
+        .faq-item {
+            background: var(--card); border: 1px solid var(--border);
+            border-radius: 14px; margin-bottom: 10px; overflow: hidden;
+            transition: border-color 0.2s;
+        }
+        .faq-item:hover { border-color: rgba(100,160,255,0.25); }
+
+        .faq-question {
+            display: flex; align-items: flex-start; justify-content: space-between;
+            padding: 16px 20px; cursor: pointer; gap: 12px;
+        }
+        .faq-question-left { display: flex; align-items: flex-start; gap: 14px; flex: 1; }
+        .faq-q-text { font-size: 15px; font-weight: 600; line-height: 1.5; color: var(--text); }
+
+        .level-badge {
+            font-size: 9px; font-weight: 700; letter-spacing: 1.5px;
+            text-transform: uppercase; padding: 3px 9px; border-radius: 20px;
+            white-space: nowrap; margin-top: 2px; flex-shrink: 0;
+        }
+        .level-easy { background: rgba(52,211,153,0.12); border: 1px solid rgba(52,211,153,0.25); color: var(--green); }
+        .level-medium { background: rgba(251,191,36,0.12); border: 1px solid rgba(251,191,36,0.25); color: var(--orange); }
+        .level-hard { background: rgba(248,113,113,0.12); border: 1px solid rgba(248,113,113,0.25); color: var(--red); }
+
+        .faq-chevron { font-size: 14px; color: var(--muted); transition: transform 0.25s; flex-shrink: 0; margin-top: 3px; }
+        .faq-item.open .faq-chevron { transform: rotate(180deg); color: var(--blue); }
+        .faq-item.open { border-color: rgba(100,160,255,0.3); }
+
+        .faq-body {
+            max-height: 0; overflow: hidden;
+            transition: max-height 0.35s ease, padding 0.25s;
+        }
+        .faq-body.open { max-height: 1000px; }
+
+        .faq-body-inner { padding: 0 20px 20px; border-top: 1px solid var(--border); }
+
+        .answer-label {
+            font-size: 10px; font-weight: 700; letter-spacing: 1.5px;
+            text-transform: uppercase; margin: 14px 0 8px;
+        }
+        .answer-label.answer { color: var(--cyan); }
+        .answer-label.tip { color: var(--green); }
+        .answer-label.trap { color: var(--red); }
+
+        .script-block {
+            background: rgba(96,165,250,0.06); border-left: 3px solid var(--blue);
+            border-radius: 0 10px 10px 0; padding: 12px 16px; margin: 8px 0;
+        }
+        .script-block p { font-size: 14px; line-height: 1.75; color: rgba(220,235,255,0.9); font-style: italic; }
+
+        .tip-box {
+            background: rgba(52,211,153,0.07); border: 1px solid rgba(52,211,153,0.2);
+            border-radius: 10px; padding: 11px 15px; margin: 8px 0;
+            font-size: 13px; line-height: 1.65; color: #6ee7b7;
+        }
+        .warn-box {
+            background: rgba(248,113,113,0.07); border: 1px solid rgba(248,113,113,0.2);
+            border-radius: 10px; padding: 11px 15px; margin: 8px 0;
+            font-size: 13px; line-height: 1.65; color: #fca5a5;
+        }
+        .q-num {
+            font-size: 12px; font-weight: 700; color: var(--blue);
+            background: rgba(96,165,250,0.12); border-radius: 6px;
+            width: 26px; height: 26px; display: flex; align-items: center;
+            justify-content: center; flex-shrink: 0; margin-top: 1px;
+        }
+
+        .stats-bar {
+            display: flex; gap: 10px; flex-wrap: wrap;
+            background: rgba(255,255,255,0.02); border: 1px solid var(--border);
+            border-radius: 12px; padding: 14px 18px; margin-bottom: 24px;
+            font-size: 13px;
+        }
+        .stat-item { display: flex; align-items: center; gap: 6px; }
+        .stat-dot { width: 8px; height: 8px; border-radius: 50%; }
+
+        .footer { text-align: center; padding: 28px 0 36px; font-size: 12px; color: var(--muted); }
+    </style>
+</head>
+<body>
+
+<div class="header">
+    <h1>❓ Antisipasi Pertanyaan Audience</h1>
+    <p>HIMAKSI Seminar Nasional · Universitas Gajayana Malang · 11 Juni 2026<br>
+    Pelajari kemungkinan pertanyaan ini sebelum sesi Q&A. Klik tiap kartu untuk melihat panduan jawaban.</p>
+</div>
+
+<div class="stats-bar">
+    <span style="color:var(--muted); font-size:12px; margin-right:4px;">Level:</span>
+    <div class="stat-item"><div class="stat-dot" style="background:#34d399;"></div> <span style="color:var(--green);">Mudah — jawab santai</span></div>
+    <div class="stat-item"><div class="stat-dot" style="background:#fbbf24;"></div> <span style="color:var(--orange);">Sedang — perlu persiapan</span></div>
+    <div class="stat-item"><div class="stat-dot" style="background:#f87171;"></div> <span style="color:var(--red);">Tricky — hati-hati framing</span></div>
+</div>
+
+<!-- ===== KATEGORI 1 ===== -->
+<div class="category-label">🎓 Karir & Masa Depan</div>
+
+<div class="faq-item" onclick="toggle(this)">
+    <div class="faq-question">
+        <div class="faq-question-left">
+            <div class="q-num">1</div>
+            <div class="faq-q-text">"Pak, apakah AI akan menggantikan profesi akuntan sepenuhnya?"</div>
+        </div>
+        <div style="display:flex; gap:8px; align-items:flex-start;">
+            <div class="level-badge level-medium">Sedang</div>
+            <div class="faq-chevron">▼</div>
+        </div>
+    </div>
+    <div class="faq-body">
+        <div class="faq-body-inner">
+            <div class="answer-label answer">Panduan Jawaban</div>
+            <div class="script-block">
+                <p>"Pertanyaan yang selalu muncul di setiap seminar AI — dan jawabannya: tidak sepenuhnya. Yang akan tergantikan adalah pekerjaan rutinnya, bukan profesinya. Akuntan yang tugasnya hanya input angka setiap hari — itu yang berisiko. Tapi akuntan yang bisa membaca data, menganalisis, dan memberikan rekomendasi strategis ke manajemen? Itu justru semakin dicari. Bedanya cuma satu: yang satu jadi operator, yang satu jadi advisor. Dan AI butuh advisor, bukan cuma operator."</p>
+            </div>
+            <div class="tip-box">💡 <strong>Kunci framing:</strong> Bukan profesinya yang hilang, tapi <em>bagian tertentu dari pekerjaannya</em> yang berubah. Gunakan analogi: "ATM tidak menghilangkan teller bank — tapi mengubah peran teller dari 'hitung uang' jadi 'layanan nasabah yang lebih personal'."</div>
+        </div>
+    </div>
+</div>
+
+<div class="faq-item" onclick="toggle(this)">
+    <div class="faq-question">
+        <div class="faq-question-left">
+            <div class="q-num">2</div>
+            <div class="faq-q-text">"Apa bedanya lulusan yang pakai AI dengan yang tidak? Seberapa besar pengaruhnya ke karir?"</div>
+        </div>
+        <div style="display:flex; gap:8px; align-items:flex-start;">
+            <div class="level-badge level-easy">Mudah</div>
+            <div class="faq-chevron">▼</div>
+        </div>
+    </div>
+    <div class="faq-body">
+        <div class="faq-body-inner">
+            <div class="answer-label answer">Panduan Jawaban</div>
+            <div class="script-block">
+                <p>"Kalau dua kandidat punya IPK sama, pengalaman organisasi sama, tapi yang satu bisa pakai AI tools dan punya portofolio analisis data — siapa yang lebih menarik di mata perekrut? Sekarang banyak job description yang sudah mencantumkan 'familiar with AI tools' sebagai nilai plus. Dalam 2-3 tahun ke depan, itu bukan lagi nilai plus — itu syarat standar. Persis seperti dulu orang yang bisa komputer dan Excel dianggap istimewa, sekarang itu sudah jadi standar minimum."</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="faq-item" onclick="toggle(this)">
+    <div class="faq-question">
+        <div class="faq-question-left">
+            <div class="q-num">3</div>
+            <div class="faq-q-text">"Pak, untuk jadi Vibe Coder atau Prompt Engineer, harus kuliah IT dulu tidak?"</div>
+        </div>
+        <div style="display:flex; gap:8px; align-items:flex-start;">
+            <div class="level-badge level-easy">Mudah</div>
+            <div class="faq-chevron">▼</div>
+        </div>
+    </div>
+    <div class="faq-body">
+        <div class="faq-body-inner">
+            <div class="answer-label answer">Panduan Jawaban</div>
+            <div class="script-block">
+                <p>"Ini justru yang menarik — tidak harus. Vibe Coder dan Prompt Engineer itu profesi yang lahir dari kemampuan berkomunikasi dengan AI secara efektif, bukan dari kemampuan coding manual. Saya sendiri bukan programmer, tapi bisa membangun website, buat otomasi, dan bikin tools internal kantor hanya dengan mendeskripsikan kebutuhan ke AI. Yang paling penting: kalian punya domain knowledge — kalau kalian paham akuntansi, dan bisa 'ngobrol' dengan AI soal akuntansi, hasilnya lebih baik dari programmer yang tidak paham akuntansi."</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="faq-item" onclick="toggle(this)">
+    <div class="faq-question">
+        <div class="faq-question-left">
+            <div class="q-num">4</div>
+            <div class="faq-q-text">"Berapa gaji Prompt Engineer? Apakah ada lowongannya di Indonesia?"</div>
+        </div>
+        <div style="display:flex; gap:8px; align-items:flex-start;">
+            <div class="level-badge level-medium">Sedang</div>
+            <div class="faq-chevron">▼</div>
+        </div>
+    </div>
+    <div class="faq-body">
+        <div class="faq-body-inner">
+            <div class="answer-label answer">Panduan Jawaban</div>
+            <div class="script-block">
+                <p>"Di luar negeri, terutama Amerika, Prompt Engineer senior bisa bergaji USD 100.000-300.000 per tahun. Di Indonesia masih berkembang, tapi trennya jelas ke sana. Yang lebih realistis untuk kalian sekarang: banyak perusahaan mencari orang yang bisa pakai AI untuk tugas-tugas spesifik di bidangnya — bukan job title 'Prompt Engineer', tapi kemampuan ini jadi nilai tambah yang signifikan. Coba cek LinkedIn, search 'AI' atau 'ChatGPT' di kolom skills — kalian akan lihat makin banyak lowongan yang mencantumkan itu."</p>
+            </div>
+            <div class="tip-box">💡 Kalau tidak tahu angka pasti di Indonesia, jujur saja: "Saya tidak punya data spesifik gajinya di Indonesia sekarang, tapi trennya jelas ke arah sana."</div>
+        </div>
+    </div>
+</div>
+
+<!-- ===== KATEGORI 2 ===== -->
+<div class="category-label">🤖 Teknologi & Tools</div>
+
+<div class="faq-item" onclick="toggle(this)">
+    <div class="faq-question">
+        <div class="faq-question-left">
+            <div class="q-num">5</div>
+            <div class="faq-q-text">"Pak, mana yang lebih bagus — ChatGPT, Gemini, atau Claude?"</div>
+        </div>
+        <div style="display:flex; gap:8px; align-items:flex-start;">
+            <div class="level-badge level-easy">Mudah</div>
+            <div class="faq-chevron">▼</div>
+        </div>
+    </div>
+    <div class="faq-body">
+        <div class="faq-body-inner">
+            <div class="answer-label answer">Panduan Jawaban</div>
+            <div class="script-block">
+                <p>"Tidak ada yang paling bagus secara absolut — tiap-tiap tool punya kelebihan di konteks tertentu. Saya pribadi pakai ketiganya tergantung tugasnya: ChatGPT bagus untuk brainstorming dan coding cepat. Claude lebih baik untuk dokumen panjang dan nulis yang lebih natural dan detail. Gemini unggul karena terintegrasi langsung ke Google Docs, Gmail, dan Drive — jadi kalau kalian sudah pakai ekosistem Google, Gemini paling mulus. Sarannya: coba ketiganya gratis dulu, rasakan sendiri mana yang paling cocok dengan cara kerja kalian."</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="faq-item" onclick="toggle(this)">
+    <div class="faq-question">
+        <div class="faq-question-left">
+            <div class="q-num">6</div>
+            <div class="faq-q-text">"Apakah AI bisa salah dalam hal hitungan matematika atau angka keuangan?"</div>
+        </div>
+        <div style="display:flex; gap:8px; align-items:flex-start;">
+            <div class="level-badge level-medium">Sedang</div>
+            <div class="faq-chevron">▼</div>
+        </div>
+    </div>
+    <div class="faq-body">
+        <div class="faq-body-inner">
+            <div class="answer-label answer">Panduan Jawaban</div>
+            <div class="script-block">
+                <p>"Bisa, dan ini penting untuk diketahui. AI generatif seperti ChatGPT itu model bahasa — dia 'berpikir' dalam kata-kata, bukan angka. Untuk kalkulasi sederhana biasanya benar, tapi untuk hitung kompleks, dia bisa salah tanpa sadar. Makanya untuk urusan angka, lebih aman pakai fitur yang AI-nya terkoneksi ke kalkulator atau tools analisis — misalnya ChatGPT dengan fitur Advanced Data Analysis, atau upload spreadsheet ke Gemini. Tapi prinsipnya tetap: verifikasi selalu sebelum angka itu masuk ke laporan resmi."</p>
+            </div>
+            <div class="tip-box">💡 Ini justru memperkuat pesan Slide 6: AI bisa 'halusinasi', termasuk dalam hal angka. Manusia yang bertanggung jawab.</div>
+        </div>
+    </div>
+</div>
+
+<div class="faq-item" onclick="toggle(this)">
+    <div class="faq-question">
+        <div class="faq-question-left">
+            <div class="q-num">7</div>
+            <div class="faq-q-text">"Apakah semua tools AI itu berbayar? Mahasiswa seperti kami sanggup tidak?"</div>
+        </div>
+        <div style="display:flex; gap:8px; align-items:flex-start;">
+            <div class="level-badge level-easy">Mudah</div>
+            <div class="faq-chevron">▼</div>
+        </div>
+    </div>
+    <div class="faq-body">
+        <div class="faq-body-inner">
+            <div class="answer-label answer">Panduan Jawaban</div>
+            <div class="script-block">
+                <p>"Kabar baiknya: semua yang saya rekomendasikan hari ini ada versi gratisnya. ChatGPT, Gemini, Claude, Microsoft Copilot, Perplexity — semua bisa diakses gratis dari HP sekarang juga. Versi berbayarnya memang ada fitur tambahan, tapi untuk mulai belajar dan eksplorasi, versi gratis sudah lebih dari cukup. Kursus yang saya rekomendasikan pun gratis — Google AI Essentials dan Coursera AI for Everyone bisa diaudit tanpa bayar sepeser pun."</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="faq-item" onclick="toggle(this)">
+    <div class="faq-question">
+        <div class="faq-question-left">
+            <div class="q-num">8</div>
+            <div class="faq-q-text">"Pak, apa itu AI Agent? Apakah ini sesuatu yang bisa langsung kita pakai?"</div>
+        </div>
+        <div style="display:flex; gap:8px; align-items:flex-start;">
+            <div class="level-badge level-medium">Sedang</div>
+            <div class="faq-chevron">▼</div>
+        </div>
+    </div>
+    <div class="faq-body">
+        <div class="faq-body-inner">
+            <div class="answer-label answer">Panduan Jawaban</div>
+            <div class="script-block">
+                <p>"AI Agent itu sederhananya adalah AI yang bisa mengerjakan tugas secara mandiri tanpa harus terus disuruh satu-satu. Bedanya dengan ChatGPT biasa: ChatGPT menjawab satu pertanyaan lalu berhenti. AI Agent bisa diset untuk: cek email masuk setiap hari, kategorikan, draft balasan, lalu kirimkan — tanpa kamu minta tiap hari. Untuk mahasiswa, tools seperti Zapier atau n8n bisa dipakai untuk bikin AI Agent sederhana. Tapi jujur, ini butuh sedikit waktu belajar — fokuslah dulu ke tools dasar sebelum ke sini."</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ===== KATEGORI 3 ===== -->
+<div class="category-label">⚖️ Etika, Risiko & Privasi</div>
+
+<div class="faq-item" onclick="toggle(this)">
+    <div class="faq-question">
+        <div class="faq-question-left">
+            <div class="q-num">9</div>
+            <div class="faq-q-text">"Apakah ada risiko plagiarisme kalau tugas kuliah dibuat pakai AI?"</div>
+        </div>
+        <div style="display:flex; gap:8px; align-items:flex-start;">
+            <div class="level-badge level-hard">Tricky</div>
+            <div class="faq-chevron">▼</div>
+        </div>
+    </div>
+    <div class="faq-body">
+        <div class="faq-body-inner">
+            <div class="warn-box">⚠️ <strong>Hati-hati:</strong> Pertanyaan ini sensitif karena menyangkut kebijakan kampus. Jangan beri jawaban yang terkesan menganjurkan kecurangan.</div>
+            <div class="answer-label answer">Panduan Jawaban</div>
+            <div class="script-block">
+                <p>"Ini pertanyaan yang penting dan jawabannya tergantung konteks. Pertama, cek dulu kebijakan kampus kalian — beberapa kampus sudah punya panduan AI yang jelas. Tapi secara prinsip: pakai AI sebagai <em>alat bantu</em> itu berbeda dengan menyerahkan output AI 100% tanpa proses berpikir. Kalau kalian pakai AI untuk brainstorming, riset awal, atau membantu menyusun kerangka — lalu kalian yang menulis, mengedit, dan berpikir kritis — itu adalah cara kerja yang valid. Yang bermasalah adalah copy-paste langsung tanpa proses intelektual sama sekali."</p>
+            </div>
+            <div class="tip-box">💡 Tutup dengan: "Integritas akademis itu penting. Pakai AI dengan jujur dan bertanggung jawab."</div>
+        </div>
+    </div>
+</div>
+
+<div class="faq-item" onclick="toggle(this)">
+    <div class="faq-question">
+        <div class="faq-question-left">
+            <div class="q-num">10</div>
+            <div class="faq-q-text">"Apakah data kita aman kalau kita pakai ChatGPT atau AI lainnya? Apakah data bisa bocor?"</div>
+        </div>
+        <div style="display:flex; gap:8px; align-items:flex-start;">
+            <div class="level-badge level-medium">Sedang</div>
+            <div class="faq-chevron">▼</div>
+        </div>
+    </div>
+    <div class="faq-body">
+        <div class="faq-body-inner">
+            <div class="answer-label answer">Panduan Jawaban</div>
+            <div class="script-block">
+                <p>"Risiko privasi itu nyata dan perlu disadari. Ketika kita mengetik sesuatu di ChatGPT versi gratis, data itu bisa digunakan untuk melatih model AI mereka. Jadi prinsip yang saya pegang: jangan pernah memasukkan data sensitif ke AI publik — nama klien, nomor rekening, data keuangan perusahaan, informasi rahasia. Untuk penggunaan pribadi dan pembelajaran, aman-aman saja. Untuk kebutuhan bisnis yang butuh privasi tinggi, ada versi enterprise dari tools ini yang datanya tidak dipakai untuk training. Intinya: pakai akal sehat — kalau data itu tidak kamu posting di media sosial, jangan dimasukkan ke AI publik."</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="faq-item" onclick="toggle(this)">
+    <div class="faq-question">
+        <div class="faq-question-left">
+            <div class="q-num">11</div>
+            <div class="faq-q-text">"Pak, apakah Bapak sendiri pernah rugi atau dirugikan karena terlalu percaya output AI?"</div>
+        </div>
+        <div style="display:flex; gap:8px; align-items:flex-start;">
+            <div class="level-badge level-medium">Sedang</div>
+            <div class="faq-chevron">▼</div>
+        </div>
+    </div>
+    <div class="faq-body">
+        <div class="faq-body-inner">
+            <div class="answer-label answer">Panduan Jawaban (jujur & personal)</div>
+            <div class="script-block">
+                <p>"Jujur — ya, pernah. Pernah ada draft dokumen yang saya kirim ke klien dengan angka yang ternyata salah karena saya tidak cek ulang output AI-nya. Malu? Ya. Tapi itu justru jadi pelajaran paling mahal yang saya dapat. Sejak itu, prinsip saya: AI draft dulu, saya yang verifikasi selalu sebelum dikirim. Kesalahan itu tidak permanen, tapi kalau terjadi di laporan keuangan resmi atau kontrak hukum — konsekuensinya bisa jauh lebih berat. Makanya saya tekankan tadi: verifikasi itu bukan opsional, itu wajib."</p>
+            </div>
+            <div class="tip-box">💡 Kalau belum pernah mengalami kerugian nyata, bisa cerita pengalaman "hampir salah" atau ganti dengan cerita kasus orang lain (Steven Schwartz) yang sudah ada di slide 6.</div>
+        </div>
+    </div>
+</div>
+
+<!-- ===== KATEGORI 4 ===== -->
+<div class="category-label">📚 Praktis & Mulai Sekarang</div>
+
+<div class="faq-item" onclick="toggle(this)">
+    <div class="faq-question">
+        <div class="faq-question-left">
+            <div class="q-num">12</div>
+            <div class="faq-q-text">"Pak, kalau mau belajar AI dari nol, mulai dari mana dulu?"</div>
+        </div>
+        <div style="display:flex; gap:8px; align-items:flex-start;">
+            <div class="level-badge level-easy">Mudah</div>
+            <div class="faq-chevron">▼</div>
+        </div>
+    </div>
+    <div class="faq-body">
+        <div class="faq-body-inner">
+            <div class="answer-label answer">Panduan Jawaban</div>
+            <div class="script-block">
+                <p>"Tiga langkah konkret: Pertama, buka salah satu dari empat tools gratis yang tadi saya sebut — ChatGPT, Gemini, Claude, atau Copilot. Pilih satu, pakai selama seminggu untuk tugas-tugas kuliah kalian yang biasa. Lihat bagaimana AI merespons, evaluasi apakah hasilnya bagus. Kedua, ikuti kursus 'AI for Everyone' di Coursera — gratis, oleh Andrew Ng, tidak butuh latar belakang teknis. Ketiga, mulai dokumentasikan setiap kali kalian pakai AI untuk sesuatu yang berguna — screenshot, tulis prosesnya. Itu cikal bakal portofolio kalian."</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="faq-item" onclick="toggle(this)">
+    <div class="faq-question">
+        <div class="faq-question-left">
+            <div class="q-num">13</div>
+            <div class="faq-q-text">"Bagaimana cara bikin portofolio AI kalau belum punya pengalaman kerja?"</div>
+        </div>
+        <div style="display:flex; gap:8px; align-items:flex-start;">
+            <div class="level-badge level-easy">Mudah</div>
+            <div class="faq-chevron">▼</div>
+        </div>
+    </div>
+    <div class="faq-body">
+        <div class="faq-body-inner">
+            <div class="answer-label answer">Panduan Jawaban</div>
+            <div class="script-block">
+                <p>"Tidak perlu nunggu kerja dulu. Ambil data dari tugas kuliah — misalnya data penjualan UKM untuk tugas Manajemen, atau data laporan keuangan sederhana dari tugas Akuntansi. Upload ke ChatGPT atau Gemini, analisis, minta AI buat visualisasinya. Lalu tulis di LinkedIn: 'Saya menganalisis data X menggunakan AI tools, berikut insight yang saya temukan...' Lengkapi dengan screenshot prosesnya. Itu sudah portofolio. Perekrut tidak mencari yang sempurna — mereka mencari yang punya <em>inisiatif untuk belajar dan mendokumentasikannya</em>."</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="faq-item" onclick="toggle(this)">
+    <div class="faq-question">
+        <div class="faq-question-left">
+            <div class="q-num">14</div>
+            <div class="faq-q-text">"Pak, apakah perusahaan di Indonesia sudah banyak yang pakai AI? Apa sudah relevan untuk fresh grad?"</div>
+        </div>
+        <div style="display:flex; gap:8px; align-items:flex-start;">
+            <div class="level-badge level-medium">Sedang</div>
+            <div class="faq-chevron">▼</div>
+        </div>
+    </div>
+    <div class="faq-body">
+        <div class="faq-body-inner">
+            <div class="answer-label answer">Panduan Jawaban</div>
+            <div class="script-block">
+                <p>"Sangat relevan, dan trennya cepat sekali. Startup dan perusahaan teknologi sudah pakai AI sejak lama. Perusahaan besar dan konglomerasi Indonesia sudah banyak yang mulai. Bahkan UKM pun mulai adopsi tools AI sederhana untuk marketing dan administrasi. Dari pengalaman saya bekerja dengan klien di AS, AI sudah bukan pilihan di sana — sudah standar. Indonesia biasanya 1-3 tahun di belakang tren global. Artinya: sekarang adalah waktu paling tepat untuk mulai — sebelum semua orang sudah melakukannya dan kalian tertinggal."</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ===== KATEGORI 5 ===== -->
+<div class="category-label">🔥 Pertanyaan Jebakan / Provokatif</div>
+
+<div class="faq-item" onclick="toggle(this)">
+    <div class="faq-question">
+        <div class="faq-question-left">
+            <div class="q-num">15</div>
+            <div class="faq-q-text">"Pak, berarti kuliah akuntansi 4 tahun sia-sia dong kalau AI bisa ngerjain semuanya?"</div>
+        </div>
+        <div style="display:flex; gap:8px; align-items:flex-start;">
+            <div class="level-badge level-hard">Tricky</div>
+            <div class="faq-chevron">▼</div>
+        </div>
+    </div>
+    <div class="faq-body">
+        <div class="faq-body-inner">
+            <div class="warn-box">⚠️ <strong>Jangan bereaksi defensif.</strong> Tarik napas, senyum dulu, baru jawab dengan tenang dan meyakinkan.</div>
+            <div class="answer-label answer">Panduan Jawaban</div>
+            <div class="script-block">
+                <p>"Justru sebaliknya — dan ini yang sering disalahpahami. AI bisa menghasilkan laporan keuangan, tapi AI tidak tahu apakah angka itu masuk akal dalam konteks bisnis kalian. AI bisa kalkulasi, tapi tidak bisa mempertanyakan apakah asumsiku sudah tepat. AI bisa draft proposal, tapi tidak bisa mempertahankan rekomendasi itu di depan dewan direksi. Yang bisa melakukan itu semua? Orang yang 4 tahun belajar akuntansi dan paham konteks bisnis. Domain expertise kalian bukan sia-sia — itu justru yang membuat output AI jadi bermakna. Tanpa itu, AI cuma menghasilkan teks yang terlihat benar tapi tidak tahu apakah kontekstual."</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="faq-item" onclick="toggle(this)">
+    <div class="faq-question">
+        <div class="faq-question-left">
+            <div class="q-num">16</div>
+            <div class="faq-q-text">"Kalau AI bisa segalanya, kenapa masih butuh manusia? Bukankah itu berarti masa depan kita suram?"</div>
+        </div>
+        <div style="display:flex; gap:8px; align-items:flex-start;">
+            <div class="level-badge level-hard">Tricky</div>
+            <div class="faq-chevron">▼</div>
+        </div>
+    </div>
+    <div class="faq-body">
+        <div class="faq-body-inner">
+            <div class="answer-label answer">Panduan Jawaban</div>
+            <div class="script-block">
+                <p>"AI tidak bisa 'segalanya' — ini penting. AI tidak punya tujuan, tidak punya values, tidak bisa memimpin manusia lain, tidak bisa membangun kepercayaan dengan klien, tidak bisa berempati ketika seorang karyawan sedang bermasalah. Setiap revolusi teknologi besar selalu diikuti dengan kekhawatiran 'lapangan kerja akan habis' — dari mesin uap, listrik, komputer, internet. Nyatanya? Lapangan kerja baru terus bermunculan. Yang berubah adalah karakternya. Masa depan bukan suram — tapi menuntut kalian untuk terus adaptasi. Dan yang ada di sini hari ini sudah selangkah lebih maju karena sadar akan itu."</p>
+            </div>
+            <div class="tip-box">💡 Tutup dengan optimisme: "Kalau saya berada di posisi kalian hari ini, saya justru excited — bukan takut."</div>
+        </div>
+    </div>
+</div>
+
+<div class="faq-item" onclick="toggle(this)">
+    <div class="faq-question">
+        <div class="faq-question-left">
+            <div class="q-num">17</div>
+            <div class="faq-q-text">"Pak, Bapak bilang pakai AI menghemat waktu — tapi bukankah itu berarti lebih sedikit orang yang dibutuhkan dan PHK massal?"</div>
+        </div>
+        <div style="display:flex; gap:8px; align-items:flex-start;">
+            <div class="level-badge level-hard">Tricky</div>
+            <div class="faq-chevron">▼</div>
+        </div>
+    </div>
+    <div class="faq-body">
+        <div class="faq-body-inner">
+            <div class="warn-box">⚠️ Pertanyaan ini provokatif tapi valid. Akui risikonya, jangan meminimalkan, tapi beri konteks yang lebih luas.</div>
+            <div class="answer-label answer">Panduan Jawaban</div>
+            <div class="script-block">
+                <p>"Kekhawatiran itu valid dan saya tidak akan pura-pura risikonya tidak ada — ada. Pekerjaan yang sifatnya repetitif memang akan berkurang volumenya. Tapi ada dua sisi cerita ini: perusahaan yang efisien karena AI bisa tumbuh lebih cepat, membuka divisi baru, masuk pasar baru — yang berarti peluang kerja baru juga. Yang terjadi bukan semata pengurangan orang, tapi <em>redistribusi peran</em>. Kuncinya ada di kalian: apakah kalian mau jadi yang tergantikan, atau yang mengoperasikan dan mengarahkan AI itu? Pilihan itu ada di tangan kalian, dimulai dari hari ini."</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="faq-item" onclick="toggle(this)">
+    <div class="faq-question">
+        <div class="faq-question-left">
+            <div class="q-num">18</div>
+            <div class="faq-q-text">"Pak, apakah penggunaan AI dalam dunia kerja tidak akan membuat kita jadi malas berpikir?"</div>
+        </div>
+        <div style="display:flex; gap:8px; align-items:flex-start;">
+            <div class="level-badge level-medium">Sedang</div>
+            <div class="faq-chevron">▼</div>
+        </div>
+    </div>
+    <div class="faq-body">
+        <div class="faq-body-inner">
+            <div class="answer-label answer">Panduan Jawaban</div>
+            <div class="script-block">
+                <p>"Pertanyaan bagus, dan ini risiko yang nyata kalau kita tidak sadar. Kalau kita pakai AI hanya untuk copy-paste tanpa berpikir — ya, otak kita tidak berkembang. Tapi analogi yang tepat: kalkulator tidak membuat kita malas matematika — dia membebaskan kita dari hitung-hitungan dasar agar bisa fokus ke masalah yang lebih kompleks. GPS tidak membuat kita malas navigasi — dia membuat kita bisa fokus ke tujuan, bukan hafal jalan. AI yang dipakai dengan benar justru membebaskan kapasitas berpikir kita untuk hal-hal yang lebih strategis. Yang jadi masalah adalah kalau kita tidak pernah melatih kemampuan kritis karena terlalu bergantung. Makanya: pakai AI, tapi tetap berpikir."</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="faq-item" onclick="toggle(this)">
+    <div class="faq-question">
+        <div class="faq-question-left">
+            <div class="q-num">19</div>
+            <div class="faq-q-text">"Pak, bagaimana kalau dosen atau perusahaan melarang penggunaan AI?"</div>
+        </div>
+        <div style="display:flex; gap:8px; align-items:flex-start;">
+            <div class="level-badge level-medium">Sedang</div>
+            <div class="faq-chevron">▼</div>
+        </div>
+    </div>
+    <div class="faq-body">
+        <div class="faq-body-inner">
+            <div class="answer-label answer">Panduan Jawaban</div>
+            <div class="script-block">
+                <p>"Itu keputusan yang harus dihormati dan diikuti — bukan untuk dilanggar diam-diam. Tapi yang tidak bisa dilarang adalah proses belajar mandiri kalian di luar kelas. Kalian tetap bisa belajar AI, bereksperimen, bangun portofolio di waktu luang. Dan untuk tempat kerja — tren di dunia justru sebaliknya: perusahaan-perusahaan besar malah mendorong karyawannya untuk pakai AI lebih banyak. Jadi kalaupun hari ini ada lingkungan yang membatasi, jangan jadikan itu alasan untuk berhenti belajar."</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="faq-item" onclick="toggle(this)">
+    <div class="faq-question">
+        <div class="faq-question-left">
+            <div class="q-num">20</div>
+            <div class="faq-q-text">"Pak, menurut Bapak dalam berapa tahun lagi AI bisa benar-benar menggantikan manusia sepenuhnya?"</div>
+        </div>
+        <div style="display:flex; gap:8px; align-items:flex-start;">
+            <div class="level-badge level-hard">Tricky</div>
+            <div class="faq-chevron">▼</div>
+        </div>
+    </div>
+    <div class="faq-body">
+        <div class="faq-body-inner">
+            <div class="warn-box">⚠️ Jangan berspekulasi dengan angka yang tidak pasti. Ini pertanyaan filosofis yang tidak perlu dijawab dengan prediksi spesifik.</div>
+            <div class="answer-label answer">Panduan Jawaban</div>
+            <div class="script-block">
+                <p>"Jujur — saya tidak tahu, dan siapapun yang memberi angka pasti untuk itu, saya ragukan. Para ahli AI terkemuka di dunia pun berbeda pendapat soal ini. Yang saya tahu pasti: selama manusia masih punya rasa empati, tujuan hidup, kreativitas yang genuine, dan kemampuan membangun kepercayaan antar manusia — AI tidak akan sepenuhnya menggantikan. Yang bisa saya pastikan adalah: dalam 5-10 tahun ke depan, cara kita bekerja akan berubah drastis, dan yang paling terdampak positif adalah yang sudah bersiap dari sekarang. Itu yang bisa kita kendalikan."</p>
+            </div>
+            <div class="tip-box">💡 Kalimat penutup yang kuat: "Saya tidak bisa prediksi masa depan — tapi saya bisa bantu kalian mempersiapkan diri untuk menghadapinya."</div>
+        </div>
+    </div>
+</div>
+
+<div class="footer">📌 HIMAKSI Seminar Nasional · Universitas Gajayana Malang · 11 Juni 2026<br>
+Dokumen ini untuk persiapan internal — tidak perlu dibagikan ke audiens.</div>
+
+<script>
+    function toggle(el) {
+        const isOpen = el.classList.contains('open');
+        // Close all
+        document.querySelectorAll('.faq-item').forEach(item => {
+            item.classList.remove('open');
+            item.querySelector('.faq-body').classList.remove('open');
+        });
+        // Open clicked if it was closed
+        if (!isOpen) {
+            el.classList.add('open');
+            el.querySelector('.faq-body').classList.add('open');
+        }
+    }
+</script>
+</body>
+</html>
