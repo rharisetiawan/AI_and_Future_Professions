@@ -435,6 +435,65 @@
             text-align: center; margin-top: 10px;
         }
 
+        /* ===== TOOL LINK BADGES ===== */
+        .tool-link {
+            display: inline-flex; align-items: center;
+            background: rgba(96,165,250,0.12);
+            border: 1px solid rgba(96,165,250,0.25);
+            border-radius: 8px; padding: 7px 14px;
+            font-size: 13px; font-weight: 600;
+            color: var(--accent-blue); text-decoration: none;
+            transition: all 0.2s; white-space: nowrap;
+        }
+        .tool-link:hover {
+            background: rgba(96,165,250,0.25);
+            border-color: rgba(96,165,250,0.5);
+            transform: translateY(-1px);
+        }
+        .tool-link-green {
+            background: rgba(52,211,153,0.1);
+            border-color: rgba(52,211,153,0.25);
+            color: var(--accent-green);
+        }
+        .tool-link-green:hover {
+            background: rgba(52,211,153,0.22);
+            border-color: rgba(52,211,153,0.5);
+        }
+
+        /* ===== RESOURCE LINKS (Slide 9) ===== */
+        .resource-link {
+            display: flex; align-items: center; gap: 14px;
+            background: rgba(96,165,250,0.06);
+            border: 1px solid rgba(96,165,250,0.12);
+            border-radius: 10px; padding: 12px 16px;
+            text-decoration: none; color: var(--text-primary);
+            transition: all 0.2s; font-size: 14px;
+        }
+        .resource-link:hover {
+            background: rgba(96,165,250,0.14);
+            border-color: rgba(96,165,250,0.35);
+            transform: translateX(3px);
+        }
+        .resource-link-green {
+            background: rgba(52,211,153,0.06);
+            border-color: rgba(52,211,153,0.12);
+        }
+        .resource-link-green:hover {
+            background: rgba(52,211,153,0.14);
+            border-color: rgba(52,211,153,0.35);
+        }
+        .resource-link-orange {
+            background: rgba(251,191,36,0.06);
+            border-color: rgba(251,191,36,0.12);
+        }
+        .resource-link-orange:hover {
+            background: rgba(251,191,36,0.14);
+            border-color: rgba(251,191,36,0.35);
+        }
+        .resource-icon {
+            font-size: 22px; flex-shrink: 0; width: 32px; text-align: center;
+        }
+
         /* ===== ANIMATIONS ===== */
         .slide.active .card,
         .slide.active .takeaway,
@@ -516,7 +575,7 @@
     <div class="grid-bg"></div>
 
     <div class="progress-bar" id="progressBar"></div>
-    <div class="slide-counter"><span class="current" id="currentSlide">1</span> / <span id="totalSlides">8</span></div>
+    <div class="slide-counter"><span class="current" id="currentSlide">1</span> / <span id="totalSlides">9</span></div>
     <div class="nav-hint" id="navHint">← → Navigasi Slide &nbsp;|&nbsp; F = Fullscreen</div>
 
     <div class="presentation" id="presentation">
@@ -702,7 +761,7 @@
                         <span class="card-icon">🚀</span>
                         <div class="card-title">Profesi Baru Bermunculan</div>
                         <div class="card-title-en">Emerging Roles</div>
-                        <div class="card-desc">Prompt Engineer, AI Auditor, Data Storyteller, AI Ethics Officer — profesi yang 5 tahun lalu belum ada.</div>
+                        <div class="card-desc">Prompt Engineer, AI Auditor, <strong>Vibe Coder</strong>, Data Storyteller, AI Ethics Officer — profesi yang 5 tahun lalu belum ada namanya.</div>
                     </div>
                 </div>
             </div>
@@ -760,27 +819,44 @@
                         <div class="step-num">TAHAP 1 — MULAI SEKARANG</div>
                         <div class="step-title">Start Today</div>
                         <ul class="step-list">
-                            <li>Eksplorasi AI tools gratis: <strong>ChatGPT, Google Gemini, Claude, Microsoft Copilot</strong></li>
+                            <li>Coba AI tools gratis:
+                                <div style="margin-top:10px; display:flex; flex-wrap:wrap; gap:8px;">
+                                    <a href="https://chat.openai.com" target="_blank" class="tool-link">ChatGPT ↗</a>
+                                    <a href="https://gemini.google.com" target="_blank" class="tool-link">Gemini ↗</a>
+                                    <a href="https://claude.ai" target="_blank" class="tool-link">Claude ↗</a>
+                                    <a href="https://copilot.microsoft.com" target="_blank" class="tool-link">Copilot ↗</a>
+                                </div>
+                            </li>
                             <li>Kuasai skill yang AI <em>tidak bisa gantikan</em>: <strong>berpikir kritis, komunikasi, dan domain expertise di bidangmu</strong></li>
-                            <li>Ikuti kursus gratis: Google AI Essentials atau Coursera AI for Everyone</li>
+                            <li>Kursus gratis bersertifikat:
+                                <div style="margin-top:10px; display:flex; flex-wrap:wrap; gap:8px;">
+                                    <a href="https://grow.google/intl/id_id/courses-and-tools/" target="_blank" class="tool-link tool-link-green">Google AI Essentials ↗</a>
+                                    <a href="https://www.coursera.org/learn/ai-for-everyone" target="_blank" class="tool-link tool-link-green">Coursera: AI for Everyone ↗</a>
+                                </div>
+                            </li>
                         </ul>
                     </div>
                     <div class="step-card step-2">
                         <div class="step-num">TAHAP 2 — JANGKA PENDEK</div>
                         <div class="step-title">This Month</div>
                         <ul class="step-list">
-                            <li>Coba integrasikan AI tools ke dalam alur kerja produktivitas sehari-hari — mulai dari yang paling sederhana</li>
-                            <li>Bangun portofolio kecil berbasis data — lakukan analisis dan visualisasi untuk mendapatkan insight baru</li>
-                            <li>Biasakan verifikasi output AI — AI bisa salah, kamu yang bertanggung jawab penuh atas hasilnya</li>
+                            <li>Integrasikan AI ke tugas sehari-hari:
+                                <div style="margin-top:10px; display:flex; flex-wrap:wrap; gap:8px;">
+                                    <a href="https://gamma.app" target="_blank" class="tool-link">Gamma — Presentasi ↗</a>
+                                    <a href="https://www.perplexity.ai" target="_blank" class="tool-link">Perplexity — Riset ↗</a>
+                                </div>
+                            </li>
+                            <li>Bangun portofolio kecil berbasis data — analisis, visualisasi, dokumentasikan, posting di LinkedIn</li>
+                            <li>Biasakan verifikasi output AI — AI bisa salah, kamu yang bertanggung jawab penuh</li>
                         </ul>
                     </div>
                     <div class="step-card step-3">
                         <div class="step-num">TAHAP 3 — JANGKA MENENGAH</div>
                         <div class="step-title">Next Step</div>
                         <ul class="step-list">
-                            <li>Cari pengalaman (magang / project / kerja) di tempat yang sudah integrasikan AI dalam operasional sehari-hari</li>
-                            <li>Bangun profil profesional, dokumentasikan setiap project yang melibatkan data &amp; AI</li>
-                            <li>Kuasai <strong>data storytelling</strong> — kemampuan menjelaskan angka &amp; insight ke orang non-teknis = nilai jual utama</li>
+                            <li>Cari pengalaman (magang / project / kerja) di tempat yang sudah integrasikan AI dalam operasional</li>
+                            <li>Bangun profil profesional di <a href="https://linkedin.com" target="_blank" style="color:var(--accent-blue); text-decoration:none;">LinkedIn ↗</a> — dokumentasikan setiap project AI-mu</li>
+                            <li>Kuasai <strong>data storytelling</strong> — menjelaskan angka &amp; insight ke orang non-teknis = nilai jual utama</li>
                         </ul>
                     </div>
                 </div>
@@ -827,6 +903,90 @@
                 </div>
             </div>
         </div>
+
+        <!-- ==================== SLIDE 9: RESOURCE PAGE ==================== -->
+        <div class="slide" data-notes="Slide bonus untuk audiens. Persilakan mereka scan atau foto slide ini. Semua link bisa diklik langsung jika mereka membuka presentasi ini di HP atau laptop.">
+            <div class="content-wrapper" style="text-align:center;">
+                <div class="slide-tag">Take Home Resources</div>
+                <div class="slide-title" style="font-size:clamp(26px,3vw,38px);">Semua Link dalam<br>Satu Halaman</div>
+                <div class="slide-subtitle">Klik langsung atau foto slide ini 📸</div>
+
+                <div class="two-col" style="max-width:1100px; margin-top:0;">
+
+                    <!-- AI Tools -->
+                    <div style="background:rgba(255,255,255,0.03); border:1px solid var(--border); border-radius:14px; padding:24px 26px; text-align:left;">
+                        <div style="font-size:11px; font-weight:700; letter-spacing:2px; text-transform:uppercase; color:var(--accent-blue); margin-bottom:16px;">🤖 AI Tools — Semua Gratis</div>
+                        <div style="display:flex; flex-direction:column; gap:10px;">
+                            <a href="https://chat.openai.com" target="_blank" class="resource-link">
+                                <span class="resource-icon">💬</span>
+                                <div><strong>ChatGPT</strong> — OpenAI<br><span style="font-size:12px; opacity:0.6;">chat.openai.com</span></div>
+                            </a>
+                            <a href="https://gemini.google.com" target="_blank" class="resource-link">
+                                <span class="resource-icon">✨</span>
+                                <div><strong>Gemini</strong> — Google<br><span style="font-size:12px; opacity:0.6;">gemini.google.com</span></div>
+                            </a>
+                            <a href="https://claude.ai" target="_blank" class="resource-link">
+                                <span class="resource-icon">🧠</span>
+                                <div><strong>Claude</strong> — Anthropic<br><span style="font-size:12px; opacity:0.6;">claude.ai</span></div>
+                            </a>
+                            <a href="https://copilot.microsoft.com" target="_blank" class="resource-link">
+                                <span class="resource-icon">💻</span>
+                                <div><strong>Microsoft Copilot</strong><br><span style="font-size:12px; opacity:0.6;">copilot.microsoft.com</span></div>
+                            </a>
+                            <a href="https://www.perplexity.ai" target="_blank" class="resource-link">
+                                <span class="resource-icon">🔍</span>
+                                <div><strong>Perplexity</strong> — AI Search<br><span style="font-size:12px; opacity:0.6;">perplexity.ai</span></div>
+                            </a>
+                            <a href="https://gamma.app" target="_blank" class="resource-link">
+                                <span class="resource-icon">🎨</span>
+                                <div><strong>Gamma</strong> — AI Presentation<br><span style="font-size:12px; opacity:0.6;">gamma.app</span></div>
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Kursus + Referensi -->
+                    <div style="display:flex; flex-direction:column; gap:16px;">
+                        <div style="background:rgba(255,255,255,0.03); border:1px solid var(--border); border-radius:14px; padding:24px 26px; text-align:left;">
+                            <div style="font-size:11px; font-weight:700; letter-spacing:2px; text-transform:uppercase; color:var(--accent-green); margin-bottom:16px;">🎓 Kursus Gratis (Ada Sertifikat)</div>
+                            <div style="display:flex; flex-direction:column; gap:10px;">
+                                <a href="https://grow.google/intl/id_id/courses-and-tools/" target="_blank" class="resource-link resource-link-green">
+                                    <span class="resource-icon">🇬</span>
+                                    <div><strong>Google AI Essentials</strong><br><span style="font-size:12px; opacity:0.6;">grow.google — Sertifikat Google</span></div>
+                                </a>
+                                <a href="https://www.coursera.org/learn/ai-for-everyone" target="_blank" class="resource-link resource-link-green">
+                                    <span class="resource-icon">🌐</span>
+                                    <div><strong>AI for Everyone</strong> — Andrew Ng<br><span style="font-size:12px; opacity:0.6;">coursera.org — Audit gratis</span></div>
+                                </a>
+                                <a href="https://learn.microsoft.com/en-us/training/" target="_blank" class="resource-link resource-link-green">
+                                    <span class="resource-icon">📚</span>
+                                    <div><strong>Microsoft AI Skills</strong><br><span style="font-size:12px; opacity:0.6;">learn.microsoft.com — Gratis</span></div>
+                                </a>
+                            </div>
+                        </div>
+
+                        <div style="background:rgba(255,255,255,0.03); border:1px solid var(--border); border-radius:14px; padding:24px 26px; text-align:left;">
+                            <div style="font-size:11px; font-weight:700; letter-spacing:2px; text-transform:uppercase; color:var(--accent-orange); margin-bottom:16px;">📰 Referensi Bacaan</div>
+                            <div style="display:flex; flex-direction:column; gap:10px;">
+                                <a href="https://www.nytimes.com/2023/05/27/nyregion/avianca-airline-lawsuit-chatgpt.html" target="_blank" class="resource-link resource-link-orange">
+                                    <span class="resource-icon">⚖️</span>
+                                    <div><strong>Kasus Pengacara & ChatGPT</strong><br><span style="font-size:12px; opacity:0.6;">New York Times — Steven Schwartz</span></div>
+                                </a>
+                                <a href="https://www.linkedin.com" target="_blank" class="resource-link resource-link-orange">
+                                    <span class="resource-icon">💼</span>
+                                    <div><strong>LinkedIn</strong> — Bangun Portofolio AI<br><span style="font-size:12px; opacity:0.6;">Cari: Prompt Engineer, AI Auditor</span></div>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div style="margin-top:20px; font-size:13px; color:var(--text-muted); font-style:italic;">
+                    Slide ini bisa diakses kembali kapanpun — bagikan link presentasi ini ke teman kalian 😊
+                </div>
+            </div>
+        </div>
+
     </div>
 
 
