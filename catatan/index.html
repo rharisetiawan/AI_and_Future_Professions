@@ -56,6 +56,27 @@
         .example-box { background: rgba(34,211,238,0.06); border: 1px solid rgba(34,211,238,0.15); border-radius: 10px; padding: 12px 16px; margin: 8px 0; }
         .example-box .label { font-size: 10px; font-weight: 700; letter-spacing: 1.5px; color: var(--cyan); margin-bottom: 6px; text-transform: uppercase; }
         .example-box p { font-size: 14px; line-height: 1.65; color: rgba(220,235,255,0.85); }
+    
+        @keyframes flashBg {
+            0% { background: var(--card); border-color: var(--border); }
+            50% { background: rgba(248,113,113,0.15); border-color: rgba(248,113,113,0.8); }
+            100% { background: var(--card); border-color: var(--border); }
+        }
+        .timer-warning {
+            font-size: 14px; font-weight: 700; color: #fbbf24;
+            padding: 4px 12px; background: rgba(251,191,36,0.15); border-radius: 6px;
+            display: none; animation: pulse 2s infinite;
+        }
+        .timer-danger {
+            font-size: 14px; font-weight: 700; color: #f87171;
+            padding: 4px 12px; background: rgba(248,113,113,0.15); border-radius: 6px;
+            display: none;
+        }
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.5; }
+            100% { opacity: 1; }
+        }
     </style>
 </head>
 <body>
@@ -69,13 +90,49 @@
 <div class="timer-bar">
     <div>
         <div class="timer-label">⏱ Waktu Berjalan</div>
-        <div class="timer-display" id="timerDisplay">00:00</div>
+        <div style="display:flex; align-items:center; gap:16px;">
+            <div class="timer-display" id="timerDisplay">00:00</div>
+            <div id="timerWarning" class="timer-warning">⚠️ Waktu hampir habis!</div>
+            <div id="timerDanger" class="timer-danger">🛑 WAKTU HABIS! SEGERA CLOSING!</div>
+        </div>
     </div>
     <div class="timer-btns">
         <button onclick="startStop()">▶ / ⏸</button>
         <button onclick="resetTimer()">↺ Reset</button>
     </div>
 </div>
+
+<!-- SLIDE 1 -->
+<div class="slide-card s1">
+    <div class="slide-header">
+        <div class="slide-num">Slide 1 / 10</div>
+        <div class="slide-time">~1.5 menit ✂️</div>
+    </div>
+    <div class="slide-title-note">🎤 Cover — Opening</div>
+
+    <div class="note-section">
+        <div class="note-section-label">Buka dengan pertanyaan</div>
+        <div class="script-block">
+            <p>"Sebelum mulai, boleh saya tanya dulu — siapa di sini yang dalam 1 minggu terakhir sudah pakai ChatGPT atau tools AI lainnya? Coba angkat tangan!"</p>
+        </div>
+    </div>
+
+    <div class="note-section">
+        <div class="note-section-label">Bridging untuk audiens lintas jurusan</div>
+        <div class="script-block">
+            <p>"Meskipun seminar ini dari HIMAKSI, insights hari ini berlaku untuk semua jurusan — karena AI tidak mengenal batas jurusan."</p>
+        </div>
+    </div>
+
+    <div class="note-section">
+        <div class="note-section-label">Transisi</div>
+        <div class="script-block">
+            <p>"Hari ini saya tidak bicara teori — saya cerita dari pengalaman nyata."</p>
+        </div>
+    </div>
+</div>
+
+
 
 <!-- SLIDE 2 -->
 <div class="slide-card s2">
@@ -561,9 +618,26 @@
         const m = Math.floor(seconds / 60), s = seconds % 60;
         const el = document.getElementById('timerDisplay');
         el.textContent = pad(m) + ':' + pad(s);
-        if (seconds >= 1800) el.style.color = '#f87171';
-        else if (seconds >= 1500) el.style.color = '#fbbf24';
-        else el.style.color = 'var(--cyan)';
+        const bar = document.querySelector('.timer-bar');
+        const warn = document.getElementById('timerWarning');
+        const danger = document.getElementById('timerDanger');
+        
+        if (seconds >= 1800) { // 30 mins
+            el.style.color = '#f87171';
+            warn.style.display = 'none';
+            danger.style.display = 'block';
+            bar.style.animation = 'flashBg 1s infinite';
+        } else if (seconds >= 1680) { // 28 mins
+            el.style.color = '#fbbf24';
+            warn.style.display = 'block';
+            danger.style.display = 'none';
+            bar.style.animation = 'none';
+        } else {
+            el.style.color = 'var(--cyan)';
+            warn.style.display = 'none';
+            danger.style.display = 'none';
+            bar.style.animation = 'none';
+        }
     }
     function startStop() {
         if (running) { clearInterval(interval); running = false; }
@@ -573,34 +647,3 @@
 </script>
 </body>
 </html>
-<!-- SLIDE 99 -->
-<div class="slide-card s99">
-    <div class="slide-header">
-        <div class="slide-num">Slide 99 / 10</div>
-        <div class="slide-time">~0 menit</div>
-    </div>
-    <div class="slide-title-note">🎤 Cover — Opening</div>
-
-    <div class="note-section">
-        <div class="note-section-label">Buka dengan pertanyaan</div>
-        <div class="script-block">
-            <p>"Sebelum mulai, boleh saya tanya dulu — siapa di sini yang dalam 1 minggu terakhir sudah pakai ChatGPT atau tools AI lainnya? Coba angkat tangan!"</p>
-        </div>
-    </div>
-
-    <div class="note-section">
-        <div class="note-section-label">Bridging untuk audiens lintas jurusan</div>
-        <div class="script-block">
-            <p>"Meskipun seminar ini dari HIMAKSI, insights hari ini berlaku untuk semua jurusan — karena AI tidak mengenal batas jurusan."</p>
-        </div>
-    </div>
-
-    <div class="note-section">
-        <div class="note-section-label">Transisi</div>
-        <div class="script-block">
-            <p>"Hari ini saya tidak bicara teori — saya cerita dari pengalaman nyata."</p>
-        </div>
-    </div>
-</div>
-
-<!-- SLIDE 99 -->
