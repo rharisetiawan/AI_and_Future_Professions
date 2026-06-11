@@ -120,14 +120,14 @@
 
         /* ===== TYPOGRAPHY ===== */
         .slide-tag {
-            font-size: 13px; font-weight: 700; letter-spacing: 3px;
+            font-size: 15px; font-weight: 700; letter-spacing: 3px;
             text-transform: uppercase; color: var(--accent-blue);
             margin-bottom: 18px;
         }
 
         .slide-title {
             font-family: 'Playfair Display', serif;
-            font-size: clamp(40px, 5vw, 62px);
+            font-size: clamp(46px, 5.5vw, 70px);
             font-weight: 800; line-height: 1.15;
             margin-bottom: 10px;
             background: linear-gradient(135deg, #fff 0%, #c7d8f5 100%);
@@ -136,7 +136,7 @@
         }
 
         .slide-subtitle {
-            font-size: clamp(16px, 1.8vw, 21px);
+            font-size: clamp(17px, 2vw, 23px);
             color: var(--text-secondary); font-weight: 300;
             margin-bottom: 36px; font-style: italic;
         }
@@ -167,26 +167,26 @@
             border-color: rgba(96,165,250,0.3);
         }
 
-        .card-icon { font-size: 30px; margin-bottom: 10px; display: block; }
+        .card-icon { font-size: 34px; margin-bottom: 10px; display: block; }
 
         .card-title {
-            font-size: 17px; font-weight: 700;
+            font-size: 19px; font-weight: 700;
             color: var(--text-primary); margin-bottom: 3px;
         }
 
         .card-title-en {
-            font-size: 12px; font-weight: 500;
+            font-size: 13px; font-weight: 500;
             color: var(--accent-blue); margin-bottom: 10px;
             letter-spacing: 0.3px; opacity: 0.85;
         }
 
         .card-desc {
-            font-size: 15px; line-height: 1.7;
+            font-size: 16px; line-height: 1.75;
             color: var(--text-secondary); font-weight: 400;
         }
 
         .card-stat {
-            font-size: 14px; font-weight: 600;
+            font-size: 15px; font-weight: 600;
             color: var(--accent-cyan); margin-top: 12px;
             padding-top: 12px;
             border-top: 1px solid var(--border);
@@ -209,12 +209,12 @@
             padding: 32px 36px; margin: 0 auto 32px; max-width: 960px;
         }
         .quote-text {
-            font-size: clamp(20px, 2.2vw, 28px);
+            font-size: clamp(22px, 2.5vw, 32px);
             font-style: italic; line-height: 1.55;
             color: var(--text-primary); font-weight: 300; margin-bottom: 14px;
         }
         .quote-author {
-            font-size: 14px; color: var(--text-muted); font-weight: 500;
+            font-size: 16px; color: var(--text-muted); font-weight: 500;
         }
 
         /* ===== TIMELINE ===== */
@@ -242,18 +242,18 @@
         .timeline-item.future::before { background: var(--bg-card); border-style: dashed; }
 
         .timeline-era {
-            font-size: 11px; font-weight: 700; letter-spacing: 1px; margin-bottom: 5px;
+            font-size: 13px; font-weight: 700; letter-spacing: 1px; margin-bottom: 5px;
         }
         .timeline-era.past-text { color: var(--text-muted); }
         .timeline-era.current-text { color: var(--accent-blue); }
         .timeline-era.future-text { color: var(--accent-purple); }
 
         .timeline-name {
-            font-size: 18px; font-weight: 700;
+            font-size: 21px; font-weight: 700;
             color: var(--text-primary); margin-bottom: 4px;
         }
         .timeline-sub {
-            font-size: 13px; color: var(--text-secondary); line-height: 1.5;
+            font-size: 15px; color: var(--text-secondary); line-height: 1.55;
         }
         .timeline-label {
             display: inline-block; font-size: 10px; font-weight: 700;
@@ -285,29 +285,29 @@
             border-radius: 16px; padding: 32px; text-align: center;
         }
         .perspective-card .name {
-            font-size: 24px; font-weight: 700;
+            font-size: 26px; font-weight: 700;
             color: var(--text-primary); margin-bottom: 4px;
         }
         .perspective-card .role {
-            font-size: 14px; color: var(--text-secondary); margin-bottom: 6px;
+            font-size: 15px; color: var(--text-secondary); margin-bottom: 6px;
         }
         .perspective-card .label {
-            font-size: 11px; font-weight: 700;
+            font-size: 12px; font-weight: 700;
             letter-spacing: 1.5px; margin: 14px 0 12px;
         }
         .perspective-card ul {
             list-style: none; text-align: left; padding-left: 8px;
         }
         .perspective-card li {
-            font-size: 15px; color: var(--text-secondary);
-            padding: 4px 0; line-height: 1.6;
+            font-size: 16px; color: var(--text-secondary);
+            padding: 5px 0; line-height: 1.65;
         }
         .perspective-card li::before { content: '→ '; color: var(--accent-blue); font-weight: 600; }
         .perspective-left .label { color: var(--accent-purple); }
         .perspective-right .label { color: var(--accent-cyan); }
         .perspective-note {
             grid-column: 1 / -1;
-            text-align: center; font-size: 15px;
+            text-align: center; font-size: 16px;
             color: var(--text-muted); font-style: italic;
             margin-top: 24px;
         }
@@ -339,17 +339,17 @@
         .step-2 .step-num { color: var(--accent-purple); }
         .step-3 .step-num { color: var(--accent-orange); }
 
-        .step-title { font-size: 19px; font-weight: 700; margin-bottom: 14px; }
+        .step-title { font-size: 21px; font-weight: 700; margin-bottom: 14px; }
 
         .step-list { list-style: none; }
         .step-list li {
-            font-size: 14px; color: var(--text-secondary);
+            font-size: 15px; color: var(--text-secondary);
             padding: 6px 0 6px 20px;
-            position: relative; line-height: 1.6;
+            position: relative; line-height: 1.65;
         }
         .step-list li::before {
             content: '✦'; position: absolute; left: 0;
-            color: var(--accent-blue); font-size: 11px; top: 8px;
+            color: var(--accent-blue); font-size: 12px; top: 8px;
         }
 
         /* ===== CLOSING ===== */
@@ -371,7 +371,7 @@
             border-radius: 8px; font-size: 16px; font-weight: 800;
         }
         .takeaway-text {
-            font-size: 16px; line-height: 1.6;
+            font-size: 17px; line-height: 1.65;
             color: var(--text-secondary); font-weight: 400;
         }
 
@@ -379,12 +379,12 @@
             display: inline-flex; align-items: center; gap: 10px;
             background: linear-gradient(135deg, rgba(96,165,250,0.14), rgba(167,139,250,0.1));
             border: 1px solid rgba(96,165,250,0.22);
-            border-radius: 14px; padding: 16px 32px;
-            font-size: 20px; font-weight: 600;
+            border-radius: 14px; padding: 18px 36px;
+            font-size: 22px; font-weight: 600;
         }
 
         .speaker-info {
-            font-size: 15px; color: var(--text-muted); margin-top: 28px;
+            font-size: 16px; color: var(--text-muted); margin-top: 28px;
         }
 
         .nvidia-note {
@@ -396,12 +396,12 @@
         .cover-meta {
             display: flex; gap: 24px; align-items: center;
             justify-content: center;
-            font-size: 15px; color: var(--text-muted); margin-top: 28px;
+            font-size: 16px; color: var(--text-muted); margin-top: 28px;
         }
         .cover-meta span { display: flex; align-items: center; gap: 8px; }
 
         .cover-speaker {
-            font-size: 19px; color: var(--text-secondary);
+            font-size: 21px; color: var(--text-secondary);
             margin-top: 20px; font-weight: 400;
         }
         .cover-speaker strong { color: var(--text-primary); font-weight: 600; }
@@ -415,7 +415,7 @@
             margin-top: 22px; text-align: center;
         }
         .ethics-footer p {
-            font-size: 15px; color: rgba(52,211,153,0.85); font-weight: 500;
+            font-size: 16px; color: rgba(52,211,153,0.85); font-weight: 500;
         }
 
         /* ===== READINESS NOTE ===== */
@@ -426,7 +426,7 @@
             max-width: 1200px; width: 100%; margin-bottom: 28px;
         }
         .readiness-note p {
-            font-size: 15px; color: var(--text-secondary);
+            font-size: 16px; color: var(--text-secondary);
             font-style: italic; text-align: center; line-height: 1.7;
         }
 
@@ -575,7 +575,7 @@
     <div class="grid-bg"></div>
 
     <div class="progress-bar" id="progressBar"></div>
-    <div class="slide-counter"><span class="current" id="currentSlide">1</span> / <span id="totalSlides">9</span></div>
+    <div class="slide-counter"><span class="current" id="currentSlide">1</span> / <span id="totalSlides">10</span></div>
     <div class="nav-hint" id="navHint">← → Navigasi Slide &nbsp;|&nbsp; F = Fullscreen</div>
 
     <div class="presentation" id="presentation">
@@ -632,7 +632,7 @@
         </div>
 
         <!-- ==================== SLIDE 3: SINYAL DUNIA NYATA ==================== -->
-        <div class="slide" data-notes="Bacakan kutipan Jensen Huang dengan penekanan. Lalu jelaskan: 'Pesan ini bukan berarti kalian harus pindah jurusan. Pesannya: yang paling berharga ke depan adalah kemampuan memahami dunia nyata DAN berkolaborasi dengan AI. Itu berlaku untuk semua jurusan — termasuk akuntansi.' Jangan terlalu lama di slide ini, max 3 menit.">
+        <div class="slide" data-notes="Bacakan kutipan Jensen Huang dengan penekanan. Inti pesan Jensen yang BENAR: dulu untuk kerja di tech wajib bisa coding. Sekarang AI sudah bisa coding sendiri lewat prompt. Yang tidak bisa digantikan AI adalah pemahaman mendalam di suatu bidang. Fisika, akuntansi, hukum — domain expertise itu yang dikombinasikan dengan AI hasilnya sempurna. Bukan soal fisika vs software, tapi soal: punya keahlian mendalam di bidangmu + AI = powerful. HATI-HATI: ada audiens SI/TI, pastikan bridging tidak menyinggung. Max 3 menit.">
             <div class="content-wrapper" style="text-align:center;">
                 <div class="slide-tag">Sinyal dari Dunia Nyata</div>
 
@@ -720,7 +720,7 @@
         </div>
 
         <!-- ==================== SLIDE 5: PELUANG ==================== -->
-        <div class="slide" data-notes="6 menit. Tekankan bahwa peluang ini berlaku untuk SEMUA profesi, bukan hanya akuntansi. Untuk setiap card, berikan contoh lisan yang relevan. Untuk 'Profesi Baru', bilang: 'Coba buka LinkedIn, search AI Auditor atau Prompt Engineer — kalian akan lihat lowongan yang 5 tahun lalu belum ada.' Untuk card akuntansi, bilang: 'Khusus untuk teman-teman dari akuntansi, ini bonus poin dari saya...'">
+        <div class="slide" data-notes="6 menit. Tekankan bahwa peluang ini berlaku untuk SEMUA profesi, bukan hanya akuntansi. Untuk setiap card, berikan contoh lisan yang relatable dan mudah dipahami. Untuk card 'Profesi Baru', bilang: 'Coba buka LinkedIn sekarang, ketik Prompt Engineer atau Vibe Coder — kalian akan lihat lowongan yang 5 tahun lalu namanya saja belum ada.'">
             <div class="content-wrapper" style="text-align:center;">
                 <div class="slide-tag">Opportunities</div>
                 <div class="slide-title" style="font-size:clamp(28px,3.2vw,40px);">Peluang AI untuk<br>Semua Profesi</div>
@@ -731,7 +731,7 @@
                         <span class="card-icon">⚡</span>
                         <div class="card-title">Otomasi Pekerjaan Rutin</div>
                         <div class="card-title-en">Automated Workflows</div>
-                        <div class="card-desc">Laporan, data entry, rekonsiliasi, administrasi — pekerjaan repetitif di semua bidang bisa dipercepat drastis dengan AI.</div>
+                        <div class="card-desc">Laporan, input data, pencocokan angka, administrasi — pekerjaan berulang di semua bidang bisa dipercepat drastis dengan AI.</div>
                     </div>
                     <div class="card">
                         <span class="card-icon">🧠</span>
@@ -755,7 +755,7 @@
                         <span class="card-icon">🎯</span>
                         <div class="card-title">Dari Pelaksana → Advisor</div>
                         <div class="card-title-en">From Executor to Strategic Advisor</div>
-                        <div class="card-desc">Profesional masa depan bukan sekadar menjalankan tugas, tapi interpreter insight AI untuk pengambilan keputusan.</div>
+                        <div class="card-desc">Profesional masa depan bukan sekadar mengerjakan tugas, tapi membaca hasil AI dan mengubahnya jadi rekomendasi keputusan yang bernilai.</div>
                     </div>
                     <div class="card">
                         <span class="card-icon">🚀</span>
@@ -803,7 +803,70 @@
             </div>
         </div>
 
-        <!-- ==================== SLIDE 7: KESIAPAN ==================== -->
+        <!-- ==================== SLIDE 7: FONDASI DIGITAL ==================== -->
+        <div class="slide" data-notes="~4 menit. Slide ini tentang dua hal yang HARUS diadopsi sebelum bicara AI: (1) Cloud-first — cerita pengalaman keluar kota dan butuh file yang ada di komputer rumah. (2) Keamanan digital — 2FA, password manager, dan awareness soal privasi di tools AI free vs pro. Ini fondasi yang sering dilewatkan tapi sangat penting.">
+            <div class="content-wrapper" style="text-align:center;">
+                <div class="slide-tag">Digital Foundation</div>
+                <div class="slide-title" style="font-size:clamp(28px,3.2vw,40px);">Fondasi Digital<br>Sebelum Bicara AI</div>
+                <div class="slide-subtitle">Dua kebiasaan yang wajib dibangun sekarang — bukan nanti</div>
+
+                <div class="two-col" style="margin-top:24px;">
+
+                    <!-- CLOUD FIRST -->
+                    <div class="card" style="text-align:left; position:relative; overflow:hidden;">
+                        <div style="position:absolute; top:0; left:0; right:0; height:3px; background: linear-gradient(90deg, #22d3ee, #60a5fa);"></div>
+                        <div style="font-size:28px; margin-bottom:12px;">☁️</div>
+                        <div class="card-title">Cloud-First Mindset</div>
+                        <div class="card-title-en">Work from Anywhere, Anytime</div>
+                        <div class="card-desc" style="margin-top:10px;">Tinggalkan kebiasaan kerja yang terikat pada satu perangkat. Semua dokumen, data, dan file kerja — simpan di cloud.</div>
+                        <div style="margin-top:14px; display:flex; flex-direction:column; gap:8px;">
+                            <div style="display:flex; align-items:center; gap:10px; font-size:13px; color:rgba(220,235,255,0.8);">
+                                <span style="font-size:16px;">📄</span> <span><strong>Google Docs</strong> — gantikan Word, edit bersama real-time</span>
+                            </div>
+                            <div style="display:flex; align-items:center; gap:10px; font-size:13px; color:rgba(220,235,255,0.8);">
+                                <span style="font-size:16px;">📊</span> <span><strong>Google Sheets</strong> — gantikan Excel, akses dari mana saja</span>
+                            </div>
+                            <div style="display:flex; align-items:center; gap:10px; font-size:13px; color:rgba(220,235,255,0.8);">
+                                <span style="font-size:16px;">🗂️</span> <span><strong>Google Drive / OneDrive</strong> — tidak ada lagi "file-nya ketinggalan di rumah"</span>
+                            </div>
+                        </div>
+                        <div style="margin-top:14px; background:rgba(34,211,238,0.08); border:1px solid rgba(34,211,238,0.2); border-radius:8px; padding:10px 12px; font-size:12px; color:#67e8f9; line-height:1.6;">
+                            💡 Bonus: Tools AI seperti Gemini terintegrasi langsung ke ekosistem cloud Google — makin mudah digunakan kalau sudah terbiasa cloud.
+                        </div>
+                    </div>
+
+                    <!-- DIGITAL SECURITY -->
+                    <div class="card" style="text-align:left; position:relative; overflow:hidden;">
+                        <div style="position:absolute; top:0; left:0; right:0; height:3px; background: linear-gradient(90deg, #f87171, #fbbf24);"></div>
+                        <div style="font-size:28px; margin-bottom:12px;">🔒</div>
+                        <div class="card-title">Keamanan Digital</div>
+                        <div class="card-title-en">Protect Your Digital Life</div>
+                        <div class="card-desc" style="margin-top:10px;">Di era AI dan cloud, akun digital kalian adalah aset. Jaga dengan serius.</div>
+                        <div style="margin-top:14px; display:flex; flex-direction:column; gap:8px;">
+                            <div style="display:flex; align-items:center; gap:10px; font-size:13px; color:rgba(220,235,255,0.8);">
+                                <span style="font-size:16px;">🔐</span> <span><strong>Aktifkan 2FA</strong> — di semua akun penting (email, Google, bank)</span>
+                            </div>
+                            <div style="display:flex; align-items:center; gap:10px; font-size:13px; color:rgba(220,235,255,0.8);">
+                                <span style="font-size:16px;">🗝️</span> <span><strong>Password Manager</strong> — satu password kuat untuk semua (Bitwarden gratis)</span>
+                            </div>
+                            <div style="display:flex; align-items:center; gap:10px; font-size:13px; color:rgba(220,235,255,0.8);">
+                                <span style="font-size:16px;">🔄</span> <span><strong>Update password berkala</strong> — minimal setiap 6 bulan</span>
+                            </div>
+                            <div style="display:flex; align-items:center; gap:10px; font-size:13px; color:rgba(220,235,255,0.8);">
+                                <span style="font-size:16px;">🤖</span> <span><strong>AI Free vs Pro</strong> — free tier: data bisa dipakai untuk training. Pro: umumnya tidak. Sensitif? Jangan dimasukkan ke AI manapun.</span>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <p style="font-size:14px; color:rgba(200,220,255,0.55); margin-top:20px; font-style:italic;">
+                    Fondasi ini bukan tentang AI — tapi tanpanya, memanfaatkan AI secara optimal akan jauh lebih sulit.
+                </p>
+            </div>
+        </div>
+
+        <!-- ==================== SLIDE 8: KESIAPAN ==================== -->
         <div class="slide" data-notes="6 menit. Ini slide paling actionable. Tekankan: 'Tools AI itu seperti balapan — yang perlu dikuasai bukan tool-nya, tapi cara berpikir menggunakannya.' Sebutkan nama tools gratis spesifik. Tutup dengan: 'Mulai kecil, konsisten, dan dokumentasikan. Portofolio AI bisa dibangun dari kampus — mulai sekarang.'">
             <div class="content-wrapper" style="text-align:center;">
                 <div class="slide-tag">Readiness</div>
