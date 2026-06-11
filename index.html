@@ -23,7 +23,98 @@
             --text-secondary: rgba(220, 230, 255, 0.85);
             --text-muted: rgba(170, 195, 240, 0.55);
             --border: rgba(100, 160, 255, 0.12);
+            --card-bg: rgba(255,255,255,0.035);
+            --overlay-bg: rgba(4,8,24,0.85);
         }
+
+        [data-theme="light"] {
+            --bg-primary: #f0f4ff;
+            --bg-card: #ffffff;
+            --accent-blue: #2563eb;
+            --accent-cyan: #0891b2;
+            --accent-purple: #7c3aed;
+            --accent-orange: #d97706;
+            --accent-red: #dc2626;
+            --accent-green: #059669;
+            --text-primary: #0f172a;
+            --text-secondary: #334155;
+            --text-muted: #64748b;
+            --border: rgba(37, 99, 235, 0.15);
+            --card-bg: #ffffff;
+            --overlay-bg: rgba(240,244,255,0.92);
+        }
+
+        /* === LIGHT MODE OVERRIDES (hardcoded dark backgrounds) === */
+        [data-theme="light"] html,
+        [data-theme="light"] body { background: var(--bg-primary); color: var(--text-primary); }
+
+        [data-theme="light"] .bg-glow-1 { background: rgba(37,99,235,0.08); }
+        [data-theme="light"] .bg-glow-2 { background: rgba(124,58,237,0.06); }
+        [data-theme="light"] .bg-glow-3 { background: rgba(8,145,178,0.05); }
+        [data-theme="light"] .grid-bg {
+            background-image:
+                linear-gradient(rgba(37,99,235,0.06) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(37,99,235,0.06) 1px, transparent 1px);
+        }
+        [data-theme="light"] .slide-title {
+            background: linear-gradient(135deg, #0f172a 0%, #2563eb 100%);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        [data-theme="light"] .perspective-card {
+            background: #f8faff;
+            border: 1px solid rgba(37,99,235,0.15);
+            box-shadow: 0 2px 12px rgba(37,99,235,0.06);
+        }
+        [data-theme="light"] .step-card {
+            background: #f8faff;
+            border: 1px solid rgba(37,99,235,0.15);
+            box-shadow: 0 2px 12px rgba(37,99,235,0.06);
+        }
+        [data-theme="light"] .takeaway {
+            background: #f8faff;
+            border: 1px solid rgba(37,99,235,0.15);
+        }
+        [data-theme="light"] .notes-panel {
+            background: rgba(248,250,255,0.97);
+            color: var(--text-primary);
+        }
+        [data-theme="light"] .notes-panel p { color: var(--text-secondary); }
+        [data-theme="light"] .quote-block {
+            background: linear-gradient(135deg, rgba(37,99,235,0.07), rgba(124,58,237,0.05));
+        }
+        [data-theme="light"] .readiness-note {
+            background: rgba(37,99,235,0.05);
+            border-color: rgba(37,99,235,0.15);
+        }
+        [data-theme="light"] .ethics-footer {
+            background: rgba(5,150,105,0.06);
+            border-color: rgba(5,150,105,0.2);
+        }
+        [data-theme="light"] .ethics-footer p { color: #059669; }
+        [data-theme="light"] .nvidia-note {
+            background: rgba(37,99,235,0.06);
+            border-color: rgba(37,99,235,0.15);
+            color: var(--text-muted);
+        }
+        [data-theme="light"] .popup-body { color: #334155; }
+        [data-theme="light"] .popup-body .popup-story {
+            background: rgba(37,99,235,0.05);
+            color: #334155;
+        }
+        [data-theme="light"] .popup-close {
+            background: rgba(0,0,0,0.05);
+            color: var(--text-muted);
+        }
+        [data-theme="light"] .card { box-shadow: 0 2px 12px rgba(37,99,235,0.06); }
+        [data-theme="light"] .risk-high { background: rgba(220,38,38,0.08); color: #dc2626; border-color: rgba(220,38,38,0.2); }
+        [data-theme="light"] .risk-medium { background: rgba(217,119,6,0.08); color: #d97706; border-color: rgba(217,119,6,0.2); }
+
+        /* Force all popup list item text to be readable in light mode */
+        [data-theme="light"] .popup-body li { color: #334155 !important; }
+        [data-theme="light"] .popup-body p { color: #334155 !important; }
+        /* Card footer rows inside slides */
+        [data-theme="light"] .card-footer-row { border-top-color: rgba(37,99,235,0.12); }
 
         html, body {
             width: 100%; height: 100%;
@@ -156,7 +247,7 @@
 
         /* ===== CARDS ===== */
         .card {
-            background: rgba(255,255,255,0.035);
+            background: var(--card-bg);
             border: 1px solid var(--border);
             border-radius: 14px; padding: 22px 26px;
             transition: transform 0.25s, border-color 0.25s;
@@ -435,6 +526,88 @@
             text-align: center; margin-top: 10px;
         }
 
+        /* ===== POPUP SYSTEM ===== */
+        .popup-overlay {
+            display: none; position: fixed; inset: 0; z-index: 500;
+            background: var(--overlay-bg); backdrop-filter: blur(8px);
+            align-items: center; justify-content: center; padding: 24px;
+        }
+        .popup-overlay.open { display: flex; }
+        .popup-box {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 20px; padding: 32px 36px;
+            max-width: 680px; width: 100%;
+            max-height: 80vh; overflow-y: auto;
+            position: relative;
+            animation: popupIn 0.25s ease;
+        }
+        @keyframes popupIn {
+            from { opacity: 0; transform: scale(0.94) translateY(12px); }
+            to   { opacity: 1; transform: scale(1) translateY(0); }
+        }
+        .popup-header {
+            display: flex; align-items: flex-start; justify-content: space-between;
+            margin-bottom: 18px; gap: 12px;
+        }
+        .popup-title {
+            font-size: 19px; font-weight: 700; color: var(--text-primary); line-height: 1.3;
+        }
+        .popup-close {
+            width: 32px; height: 32px; border-radius: 8px; flex-shrink: 0;
+            background: rgba(255,255,255,0.06); border: 1px solid var(--border);
+            color: var(--text-muted); font-size: 16px; cursor: pointer;
+            display: flex; align-items: center; justify-content: center;
+            transition: all 0.2s;
+        }
+        .popup-close:hover { background: rgba(248,113,113,0.15); color: #f87171; border-color: rgba(248,113,113,0.3); }
+        .popup-body { font-size: 15px; line-height: 1.8; color: rgba(210,228,255,0.88); }
+        .popup-body p { margin-bottom: 12px; }
+        .popup-body strong { color: var(--text-primary); }
+        .popup-body .popup-story {
+            background: rgba(96,165,250,0.06); border-left: 3px solid var(--accent-blue);
+            border-radius: 0 10px 10px 0; padding: 14px 18px; margin: 14px 0;
+            font-style: italic; color: rgba(220,235,255,0.9);
+        }
+        .popup-body .popup-links {
+            display: flex; flex-wrap: wrap; gap: 8px; margin-top: 16px;
+        }
+        .popup-body .popup-tag {
+            font-size: 11px; font-weight: 700; letter-spacing: 1.5px;
+            text-transform: uppercase; color: var(--accent-cyan); margin: 14px 0 6px;
+        }
+        .popup-divider { height: 1px; background: var(--border); margin: 14px 0; }
+        /* ⓘ info button */
+        .info-btn {
+            display: inline-flex; align-items: center; justify-content: center;
+            width: 22px; height: 22px; border-radius: 50%;
+            background: rgba(96,165,250,0.12); border: 1px solid rgba(96,165,250,0.25);
+            color: var(--accent-blue); font-size: 12px; font-weight: 700;
+            cursor: pointer; transition: all 0.2s; flex-shrink: 0;
+            vertical-align: middle; margin-left: 6px; user-select: none;
+        }
+        .info-btn:hover { background: rgba(96,165,250,0.3); border-color: rgba(96,165,250,0.6); transform: scale(1.1); }
+        .card-footer-row {
+            display: flex; align-items: center; justify-content: space-between;
+            margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--border);
+            flex-wrap: wrap; gap: 8px;
+        }
+        .tool-chips { display: flex; flex-wrap: wrap; gap: 6px; }
+        .tool-chip {
+            display: inline-flex; align-items: center; gap: 4px;
+            font-size: 11px; font-weight: 600; padding: 3px 9px;
+            border-radius: 20px; text-decoration: none; transition: all 0.2s;
+            white-space: nowrap;
+        }
+        .chip-blue { background: rgba(96,165,250,0.12); border: 1px solid rgba(96,165,250,0.2); color: var(--accent-blue); }
+        .chip-blue:hover { background: rgba(96,165,250,0.25); }
+        .chip-green { background: rgba(52,211,153,0.1); border: 1px solid rgba(52,211,153,0.2); color: var(--accent-green); }
+        .chip-green:hover { background: rgba(52,211,153,0.22); }
+        .chip-purple { background: rgba(167,139,250,0.1); border: 1px solid rgba(167,139,250,0.2); color: var(--accent-purple); }
+        .chip-purple:hover { background: rgba(167,139,250,0.22); }
+        .chip-orange { background: rgba(251,191,36,0.1); border: 1px solid rgba(251,191,36,0.2); color: var(--accent-orange); }
+        .chip-orange:hover { background: rgba(251,191,36,0.22); }
+
         /* ===== TOOL LINK BADGES ===== */
         .tool-link {
             display: inline-flex; align-items: center;
@@ -514,6 +687,85 @@
         .slide.active .card:nth-child(5) { animation-delay: 0.4s; }
         .slide.active .card:nth-child(6) { animation-delay: 0.48s; }
 
+        /* ===== THEME TOGGLE ===== */
+        .theme-toggle {
+            position: fixed; top: 20px; right: 28px; z-index: 100;
+            background: var(--card-bg); border: 1px solid var(--border);
+            color: var(--text-primary); font-size: 13px; font-weight: 600;
+            padding: 8px 14px; border-radius: 20px; cursor: pointer;
+            transition: all 0.2s; display: flex; align-items: center; gap: 6px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+        .theme-toggle:hover { border-color: var(--accent-blue); }
+
+        /* ===== LIGHT MODE — ADDITIONAL OVERRIDES ===== */
+        /* Resource links */
+        [data-theme="light"] .resource-link {
+            background: #f0f4ff;
+            border-color: rgba(37,99,235,0.15);
+            color: var(--text-primary);
+        }
+        [data-theme="light"] .resource-link:hover {
+            background: #e0eaff;
+            border-color: rgba(37,99,235,0.35);
+        }
+        /* Tool chips */
+        [data-theme="light"] .chip-blue { background: rgba(37,99,235,0.1); border-color: rgba(37,99,235,0.25); color: #2563eb; }
+        [data-theme="light"] .chip-green { background: rgba(5,150,105,0.1); border-color: rgba(5,150,105,0.25); color: #059669; }
+        [data-theme="light"] .chip-purple { background: rgba(124,58,237,0.1); border-color: rgba(124,58,237,0.25); color: #7c3aed; }
+        [data-theme="light"] .chip-orange { background: rgba(217,119,6,0.1); border-color: rgba(217,119,6,0.25); color: #d97706; }
+        /* Tool links */
+        [data-theme="light"] .tool-link {
+            background: rgba(37,99,235,0.08);
+            border-color: rgba(37,99,235,0.2);
+            color: #2563eb;
+        }
+        [data-theme="light"] .tool-link:hover { background: rgba(37,99,235,0.18); }
+        [data-theme="light"] .tool-link-green { background: rgba(5,150,105,0.08); border-color: rgba(5,150,105,0.2); color: #059669; }
+        /* Popup tag */
+        [data-theme="light"] .popup-body .popup-tag { color: #0891b2; }
+        /* ⓘ info button */
+        [data-theme="light"] .info-btn {
+            background: rgba(37,99,235,0.1);
+            border-color: rgba(37,99,235,0.25);
+            color: #2563eb;
+        }
+        [data-theme="light"] .info-btn:hover { background: rgba(37,99,235,0.22); }
+        /* Timeline */
+        [data-theme="light"] .timeline-item { border-top-color: rgba(37,99,235,0.2); }
+        [data-theme="light"] .timeline-item::before { background: #fff; border-color: rgba(37,99,235,0.4); }
+        [data-theme="light"] .timeline-item.past::before { background: rgba(37,99,235,0.3); }
+        [data-theme="light"] .timeline-item.current::before { background: #2563eb; }
+        [data-theme="light"] .timeline-item.future::before { background: #f0f4ff; }
+        [data-theme="light"] .label-past { background: rgba(37,99,235,0.08); }
+        /* Notes toggle button */
+        [data-theme="light"] .notes-toggle {
+            background: rgba(37,99,235,0.08);
+            border-color: rgba(37,99,235,0.2);
+            color: #2563eb;
+        }
+        /* VS badge */
+        [data-theme="light"] .vs-badge {
+            background: rgba(37,99,235,0.1);
+            border-color: rgba(37,99,235,0.25);
+        }
+        /* Speaker info */
+        [data-theme="light"] .speaker-info { color: var(--text-secondary); }
+        /* QA Badge */
+        [data-theme="light"] .qa-badge {
+            background: linear-gradient(135deg, rgba(37,99,235,0.1), rgba(124,58,237,0.07));
+            border-color: rgba(37,99,235,0.2);
+        }
+        /* Slide background */
+        [data-theme="light"] .presentation { background: var(--bg-primary); }
+
+        /* ===== POPUP MOBILE ===== */
+        @media (max-width: 768px) {
+            .popup-box { padding: 22px 20px; }
+            .popup-title { font-size: 17px; }
+            .popup-body { font-size: 14px; }
+        }
+
         /* ===== RESPONSIVE MOBILE ===== */
         @media (max-width: 768px) {
             .slide { 
@@ -569,6 +821,8 @@
 
 </head>
 <body>
+    <button class="theme-toggle" id="themeToggle" onclick="toggleTheme()">☀️ Terang</button>
+
     <div class="bg-glow bg-glow-1"></div>
     <div class="bg-glow bg-glow-2"></div>
     <div class="bg-glow bg-glow-3"></div>
@@ -636,9 +890,12 @@
             <div class="content-wrapper" style="text-align:center;">
                 <div class="slide-tag">Sinyal dari Dunia Nyata</div>
 
-                <div class="quote-block" style="text-align:left;">
+                <div class="quote-block" style="text-align:left; position:relative;">
                     <div class="quote-text">"Jika saya berusia 20 tahun sekarang, mungkin saya akan memilih ilmu fisika dibandingkan ilmu software."</div>
-                    <div class="quote-author">— Jensen Huang, CEO Nvidia &nbsp;|&nbsp; Pendiri &amp; CEO perusahaan chip AI terbesar di dunia</div>
+                    <div style="display:flex; align-items:center; justify-content:space-between; margin-top:10px;">
+                        <div class="quote-author">— Jensen Huang, CEO Nvidia &nbsp;|&nbsp; Pendiri &amp; CEO perusahaan chip AI terbesar di dunia</div>
+                        <button class="info-btn" onclick="openPopup('p3-jensen')" title="Baca konteks & makna kutipan ini">ⓘ</button>
+                    </div>
                 </div>
 
                 <p style="font-size:16px; color:var(--text-secondary); max-width:860px; margin: 0 auto 28px; line-height:1.85; text-align:center;">
@@ -671,7 +928,10 @@
                         <span class="timeline-label label-future">NEXT WAVE</span>
                     </div>
                 </div>
-                <div class="nvidia-note">Nvidia: Perusahaan pertama di dunia yang mencapai market cap USD 5 triliun (Oktober 2025)</div>
+                <div style="display:flex; align-items:center; justify-content:center; gap:12px; margin-top:10px;">
+                    <div class="nvidia-note" style="margin:0;">Nvidia: Perusahaan pertama di dunia yang mencapai market cap USD 5 triliun (Oktober 2025)</div>
+                    <button class="info-btn" onclick="openPopup('p3-timeline')" title="Baca penjelasan lengkap 3 gelombang AI">ⓘ</button>
+                </div>
             </div>
         </div>
 
@@ -688,6 +948,14 @@
                         <div class="card-title">Manajemen Tim</div>
                         <div class="card-title-en">Team Management</div>
                         <div class="card-desc">Analisis transcript meeting 1-on-1 dengan AI — identifikasi pola masalah sebelum eskalasi ke CEO.</div>
+                        <div class="card-footer-row">
+                            <div class="tool-chips">
+                                <a href="https://tactiq.io" target="_blank" class="tool-chip chip-blue">📹 Tactiq.ai</a>
+                                <a href="https://claude.ai" target="_blank" class="tool-chip chip-purple">🤖 Claude</a>
+                                <a href="https://docs.google.com" target="_blank" class="tool-chip chip-green">📄 Google Docs</a>
+                            </div>
+                            <button class="info-btn" onclick="openPopup('p4-1')">ⓘ</button>
+                        </div>
                         <div class="card-stat">⏱ Dari 2-3 jam review manual → 15 menit</div>
                     </div>
                     <div class="card">
@@ -695,6 +963,14 @@
                         <div class="card-title">Pembuatan Dokumen</div>
                         <div class="card-title-en">Document Creation</div>
                         <div class="card-desc">SOP, proposal, brief klien — AI mempercepat draft awal, tinggal review dan polish.</div>
+                        <div class="card-footer-row">
+                            <div class="tool-chips">
+                                <a href="https://claude.ai" target="_blank" class="tool-chip chip-purple">🤖 Claude</a>
+                                <a href="https://chat.openai.com" target="_blank" class="tool-chip chip-blue">💬 ChatGPT</a>
+                                <a href="https://gamma.app" target="_blank" class="tool-chip chip-orange">🎨 Gamma</a>
+                            </div>
+                            <button class="info-btn" onclick="openPopup('p4-2')">ⓘ</button>
+                        </div>
                         <div class="card-stat">⏱ Dari 2-3 hari → 2-4 jam</div>
                     </div>
                     <div class="card">
@@ -702,6 +978,13 @@
                         <div class="card-title">Review & QA</div>
                         <div class="card-title-en">Website Quality Assurance</div>
                         <div class="card-desc">AI bantu generate checklist testing, analisis responsivitas, dan identifikasi bug secara sistematis.</div>
+                        <div class="card-footer-row">
+                            <div class="tool-chips">
+                                <a href="https://chat.openai.com" target="_blank" class="tool-chip chip-blue">💬 ChatGPT</a>
+                                <a href="https://gemini.google.com" target="_blank" class="tool-chip chip-green">✨ Gemini</a>
+                            </div>
+                            <button class="info-btn" onclick="openPopup('p4-3')">ⓘ</button>
+                        </div>
                         <div class="card-stat">📉 Mengurangi miss-check hingga 80%</div>
                     </div>
                     <div class="card">
@@ -709,6 +992,13 @@
                         <div class="card-title">Komunikasi Klien</div>
                         <div class="card-title-en">Client Communication</div>
                         <div class="card-desc">Drafting email update klien yang lebih profesional dan milestone-driven dengan bantuan AI.</div>
+                        <div class="card-footer-row">
+                            <div class="tool-chips">
+                                <a href="https://claude.ai" target="_blank" class="tool-chip chip-purple">🤖 Claude</a>
+                                <a href="https://chat.openai.com" target="_blank" class="tool-chip chip-blue">💬 ChatGPT</a>
+                            </div>
+                            <button class="info-btn" onclick="openPopup('p4-4')">ⓘ</button>
+                        </div>
                         <div class="card-stat">⏱ Dari 30 menit per email → 5 menit</div>
                     </div>
                 </div>
@@ -732,36 +1022,74 @@
                         <div class="card-title">Otomasi Pekerjaan Rutin</div>
                         <div class="card-title-en">Automated Workflows</div>
                         <div class="card-desc">Laporan, input data, pencocokan angka, administrasi — pekerjaan berulang di semua bidang bisa dipercepat drastis dengan AI.</div>
+                        <div class="card-footer-row">
+                            <div class="tool-chips">
+                                <a href="https://chat.openai.com" target="_blank" class="tool-chip chip-blue">💬 ChatGPT</a>
+                                <a href="https://gemini.google.com" target="_blank" class="tool-chip chip-green">✨ Gemini</a>
+                            </div>
+                            <button class="info-btn" onclick="openPopup('p5-1')">ⓘ</button>
+                        </div>
                     </div>
                     <div class="card">
                         <span class="card-icon">🧠</span>
                         <div class="card-title">Analisis & Pengambilan Keputusan</div>
                         <div class="card-title-en">AI-Powered Decision Making</div>
                         <div class="card-desc">AI bantu analisis data besar, deteksi pola, dan prediksi tren — dari keuangan, marketing, hingga supply chain.</div>
+                        <div class="card-footer-row">
+                            <div class="tool-chips">
+                                <a href="https://www.perplexity.ai" target="_blank" class="tool-chip chip-purple">🔍 Perplexity</a>
+                                <a href="https://notebooklm.google.com" target="_blank" class="tool-chip chip-green">📔 NotebookLM</a>
+                            </div>
+                            <button class="info-btn" onclick="openPopup('p5-2')">ⓘ</button>
+                        </div>
                     </div>
                     <div class="card">
                         <span class="card-icon">✍️</span>
                         <div class="card-title">Kreasi & Komunikasi</div>
                         <div class="card-title-en">Content & Communication</div>
                         <div class="card-desc">Copywriting, presentasi, proposal, email profesional — AI mempercepat proses kreatif di semua industri.</div>
+                        <div class="card-footer-row">
+                            <div class="tool-chips">
+                                <a href="https://gamma.app" target="_blank" class="tool-chip chip-orange">🎨 Gamma</a>
+                                <a href="https://claude.ai" target="_blank" class="tool-chip chip-purple">🤖 Claude</a>
+                            </div>
+                            <button class="info-btn" onclick="openPopup('p5-3')">ⓘ</button>
+                        </div>
                     </div>
                     <div class="card">
                         <span class="card-icon">📋</span>
                         <div class="card-title">Efisiensi Dokumen</div>
                         <div class="card-title-en">Document Intelligence</div>
                         <div class="card-desc">Ekstrak, ringkas, dan kategorikan data dari kontrak, invoice, jurnal, dan dokumen bisnis secara otomatis.</div>
+                        <div class="card-footer-row">
+                            <div class="tool-chips">
+                                <a href="https://notebooklm.google.com" target="_blank" class="tool-chip chip-green">📔 NotebookLM</a>
+                                <a href="https://claude.ai" target="_blank" class="tool-chip chip-purple">🤖 Claude</a>
+                            </div>
+                            <button class="info-btn" onclick="openPopup('p5-4')">ⓘ</button>
+                        </div>
                     </div>
                     <div class="card">
                         <span class="card-icon">🎯</span>
                         <div class="card-title">Dari Pelaksana → Advisor</div>
                         <div class="card-title-en">From Executor to Strategic Advisor</div>
                         <div class="card-desc">Profesional masa depan bukan sekadar mengerjakan tugas, tapi membaca hasil AI dan mengubahnya jadi rekomendasi keputusan yang bernilai.</div>
+                        <div class="card-footer-row">
+                            <div class="tool-chips"></div>
+                            <button class="info-btn" onclick="openPopup('p5-5')">ⓘ</button>
+                        </div>
                     </div>
                     <div class="card">
                         <span class="card-icon">🚀</span>
                         <div class="card-title">Profesi Baru Bermunculan</div>
                         <div class="card-title-en">Emerging Roles</div>
                         <div class="card-desc">Prompt Engineer, AI Auditor, <strong>Vibe Coder</strong>, Data Storyteller, AI Ethics Officer — profesi yang 5 tahun lalu belum ada namanya.</div>
+                        <div class="card-footer-row">
+                            <div class="tool-chips">
+                                <a href="https://www.linkedin.com/jobs/search/?keywords=prompt+engineer" target="_blank" class="tool-chip chip-blue">🔗 Cek LinkedIn</a>
+                            </div>
+                            <button class="info-btn" onclick="openPopup('p5-6')">ⓘ</button>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -779,21 +1107,25 @@
                         <span class="risk-badge risk-high">HIGH RISK</span>
                         <div class="card-title">Transformasi Peran Entry-Level</div>
                         <div class="card-desc">Pekerjaan rutin (input data, rekonsiliasi manual) mulai bertransformasi. Yang tidak beradaptasi akan sulit bersaing.</div>
+                        <div class="card-footer-row"><div></div><button class="info-btn" onclick="openPopup('p6-1')">ⓘ</button></div>
                     </div>
                     <div class="card">
                         <span class="risk-badge risk-medium">MEDIUM RISK</span>
                         <div class="card-title">AI Literacy Gap</div>
                         <div class="card-desc">Banyak fresh graduate belum tahu cara pakai AI tools untuk kerja. Ini bukan soal coding — tapi soal workflow dan prompt.</div>
+                        <div class="card-footer-row"><div></div><button class="info-btn" onclick="openPopup('p6-2')">ⓘ</button></div>
                     </div>
                     <div class="card">
                         <span class="risk-badge risk-high">HIGH RISK</span>
                         <div class="card-title">Bahaya Over-Trust pada AI</div>
                         <div class="card-desc">AI bisa salah (hallucination). Profesional yang tidak kritis terhadap output AI bisa menghasilkan laporan atau keputusan yang keliru.</div>
+                        <div class="card-footer-row"><div></div><button class="info-btn" onclick="openPopup('p6-3')">ⓘ</button></div>
                     </div>
                     <div class="card">
                         <span class="risk-badge risk-medium">MEDIUM RISK</span>
                         <div class="card-title">Persaingan Semakin Ketat</div>
                         <div class="card-desc">Lowongan pekerjaan rutin berkurang. Diferensiasi skill dan portofolio jadi semakin penting untuk menonjol.</div>
+                        <div class="card-footer-row"><div></div><button class="info-btn" onclick="openPopup('p6-4')">ⓘ</button></div>
                     </div>
                 </div>
 
@@ -833,6 +1165,14 @@
                         <div style="margin-top:14px; background:rgba(34,211,238,0.08); border:1px solid rgba(34,211,238,0.2); border-radius:8px; padding:10px 12px; font-size:12px; color:#67e8f9; line-height:1.6;">
                             💡 Bonus: Tools AI seperti Gemini terintegrasi langsung ke ekosistem cloud Google — makin mudah digunakan kalau sudah terbiasa cloud.
                         </div>
+                        <div class="card-footer-row" style="margin-top:12px; padding-top:12px; border-top:1px solid var(--border);">
+                            <div class="tool-chips">
+                                <a href="https://docs.google.com" target="_blank" class="tool-chip chip-green">📄 Google Docs</a>
+                                <a href="https://sheets.google.com" target="_blank" class="tool-chip chip-green">📊 Google Sheets</a>
+                                <a href="https://drive.google.com" target="_blank" class="tool-chip chip-green">🗂️ Google Drive</a>
+                            </div>
+                            <button class="info-btn" onclick="openPopup('p7-cloud')">ⓘ</button>
+                        </div>
                     </div>
 
                     <!-- DIGITAL SECURITY -->
@@ -855,6 +1195,12 @@
                             <div style="display:flex; align-items:center; gap:10px; font-size:13px; color:rgba(220,235,255,0.8);">
                                 <span style="font-size:16px;">🤖</span> <span><strong>AI Free vs Pro</strong> — free tier: data bisa dipakai untuk training. Pro: umumnya tidak. Sensitif? Jangan dimasukkan ke AI manapun.</span>
                             </div>
+                        </div>
+                        <div class="card-footer-row" style="margin-top:12px; padding-top:12px; border-top:1px solid var(--border);">
+                            <div class="tool-chips">
+                                <a href="https://bitwarden.com" target="_blank" class="tool-chip chip-orange">🔑 Bitwarden</a>
+                            </div>
+                            <button class="info-btn" onclick="openPopup('p7-security')">ⓘ</button>
                         </div>
                     </div>
 
@@ -893,11 +1239,14 @@
                             <li>Kuasai skill yang AI <em>tidak bisa gantikan</em>: <strong>berpikir kritis, komunikasi, dan domain expertise di bidangmu</strong></li>
                             <li>Kursus gratis bersertifikat:
                                 <div style="margin-top:10px; display:flex; flex-wrap:wrap; gap:8px;">
-                                    <a href="https://grow.google/intl/id_id/courses-and-tools/" target="_blank" class="tool-link tool-link-green">Google AI Essentials ↗</a>
+                                    <a href="https://www.coursera.org/learn/google-ai-essentials" target="_blank" class="tool-link tool-link-green">Google AI Essentials ↗</a>
                                     <a href="https://www.coursera.org/learn/ai-for-everyone" target="_blank" class="tool-link tool-link-green">Coursera: AI for Everyone ↗</a>
                                 </div>
                             </li>
                         </ul>
+                        <div style="text-align:right; margin-top:10px;">
+                            <button class="info-btn" onclick="openPopup('p8-tahap1')">ⓘ Detail Tahap 1</button>
+                        </div>
                     </div>
                     <div class="step-card step-2">
                         <div class="step-num">TAHAP 2 — JANGKA PENDEK</div>
@@ -912,6 +1261,9 @@
                             <li>Bangun portofolio kecil berbasis data — analisis, visualisasi, dokumentasikan, posting di LinkedIn</li>
                             <li>Biasakan verifikasi output AI — AI bisa salah, kamu yang bertanggung jawab penuh</li>
                         </ul>
+                        <div style="text-align:right; margin-top:10px;">
+                            <button class="info-btn" onclick="openPopup('p8-tahap2')">ⓘ Detail Tahap 2</button>
+                        </div>
                     </div>
                     <div class="step-card step-3">
                         <div class="step-num">TAHAP 3 — JANGKA MENENGAH</div>
@@ -921,6 +1273,9 @@
                             <li>Bangun profil profesional di <a href="https://linkedin.com" target="_blank" style="color:var(--accent-blue); text-decoration:none;">LinkedIn ↗</a> — dokumentasikan setiap project AI-mu</li>
                             <li>Kuasai <strong>data storytelling</strong> — menjelaskan angka &amp; insight ke orang non-teknis = nilai jual utama</li>
                         </ul>
+                        <div style="text-align:right; margin-top:10px;">
+                            <button class="info-btn" onclick="openPopup('p8-tahap3')">ⓘ Detail Tahap 3</button>
+                        </div>
                     </div>
                 </div>
 
@@ -1012,9 +1367,9 @@
                         <div style="background:rgba(255,255,255,0.03); border:1px solid var(--border); border-radius:14px; padding:24px 26px; text-align:left;">
                             <div style="font-size:11px; font-weight:700; letter-spacing:2px; text-transform:uppercase; color:var(--accent-green); margin-bottom:16px;">🎓 Kursus Gratis (Ada Sertifikat)</div>
                             <div style="display:flex; flex-direction:column; gap:10px;">
-                                <a href="https://grow.google/intl/id_id/courses-and-tools/" target="_blank" class="resource-link resource-link-green">
+                                <a href="https://www.coursera.org/learn/google-ai-essentials" target="_blank" class="resource-link resource-link-green">
                                     <span class="resource-icon">🇬</span>
-                                    <div><strong>Google AI Essentials</strong><br><span style="font-size:12px; opacity:0.6;">grow.google — Sertifikat Google</span></div>
+                                    <div><strong>Google AI Essentials</strong><br><span style="font-size:12px; opacity:0.6;">coursera.org — Sertifikat Google</span></div>
                                 </a>
                                 <a href="https://www.coursera.org/learn/ai-for-everyone" target="_blank" class="resource-link resource-link-green">
                                     <span class="resource-icon">🌐</span>
@@ -1136,5 +1491,456 @@
         // Initialize progress bar
         document.getElementById('progressBar').style.width = (1 / totalSlides * 100) + '%';
     </script>
+
+    <!-- ==================== POPUP OVERLAY ==================== -->
+    <div class="popup-overlay" id="popupOverlay" onclick="closePopupOnOverlay(event)">
+        <div class="popup-box" id="popupBox">
+            <div class="popup-header">
+                <div class="popup-title" id="popupTitle"></div>
+                <button class="popup-close" onclick="closePopup()">✕</button>
+            </div>
+            <div class="popup-body" id="popupBody"></div>
+        </div>
+    </div>
+
+    <script>
+    // ===== POPUP DATA =====
+    const popups = {
+
+        // SLIDE 4 — AI di Pekerjaan
+        'p4-1': {
+            title: '🧑‍💼 Manajemen Tim — Cerita Nyata',
+            body: `
+                <p>Ini salah satu perubahan terbesar dalam cara saya bekerja sehari-hari.</p>
+                <div class="popup-story">
+                    "Dulu waktu saya 1-on-1 sama anggota tim, saya harus rekam meeting-nya, lalu putar ulang berkali-kali sambil nulis catatan manual. Bisa habis 2-3 jam hanya untuk review satu sesi. Sekarang? Saya pakai <strong>Tactiq.ai</strong> — aplikasi yang otomatis merekam dan mentranskrip meeting Google Meet atau Zoom secara real-time. Hasilnya saya copy, lalu saya kirim ke <strong>Claude</strong> untuk dianalisis: apa isu utamanya, apa action item-nya, dan pola masalah yang berulang. Hasilnya langsung saya simpan rapi di <strong>Google Docs</strong>. Dari yang tadinya 2-3 jam, sekarang selesai dalam 15 menit."
+                </div>
+                <div class="popup-tag">Tools yang dipakai</div>
+                <div class="popup-links">
+                    <a href="https://tactiq.io" target="_blank" class="tool-chip chip-blue">📹 Tactiq.ai — transkripsi meeting otomatis</a>
+                    <a href="https://claude.ai" target="_blank" class="tool-chip chip-purple">🤖 Claude — analisis & rangkuman</a>
+                    <a href="https://docs.google.com" target="_blank" class="tool-chip chip-green">📄 Google Docs — simpan & bagikan</a>
+                </div>`
+        },
+        'p4-2': {
+            title: '📄 Pembuatan Dokumen — Lebih Cepat, Lebih Rapi',
+            body: `
+                <p>SOP, proposal klien, brief proyek — semua dokumen ini dulu memakan waktu berhari-hari untuk dibuat dari nol.</p>
+                <div class="popup-story">
+                    "Sekarang alurnya berubah: saya jelaskan konteks ke Claude atau ChatGPT — siapa audiensnya, apa tujuannya, apa poin-poin utamanya. AI buatkan draft awal. Saya review, edit bagian yang kurang tepat, tambahkan data yang AI tidak punya. Total waktu turun drastis — dari 2-3 hari jadi 2-4 jam. Yang paling penting: kualitasnya tidak turun, justru lebih konsisten karena strukturnya lebih rapi."
+                </div>
+                <p>Untuk slide presentasi, coba <strong>Gamma.app</strong> — cukup ketik topik dan poin-poin utamanya, AI langsung buatkan slide dengan desain yang bagus.</p>
+                <div class="popup-tag">Tools yang dipakai</div>
+                <div class="popup-links">
+                    <a href="https://claude.ai" target="_blank" class="tool-chip chip-purple">🤖 Claude — dokumen panjang & terstruktur</a>
+                    <a href="https://chat.openai.com" target="_blank" class="tool-chip chip-blue">💬 ChatGPT — draft cepat & versatile</a>
+                    <a href="https://gamma.app" target="_blank" class="tool-chip chip-orange">🎨 Gamma — slide presentasi dari AI</a>
+                </div>`
+        },
+        'p4-3': {
+            title: '🔍 Review & QA — Lebih Sistematis',
+            body: `
+                <p>Di digital agency, quality assurance website adalah proses yang panjang dan rentan human error — terutama kalau dikerjakan manual di banyak halaman.</p>
+                <div class="popup-story">
+                    "Saya pakai AI untuk generate checklist QA yang komprehensif berdasarkan jenis website-nya. AI juga bantu identifikasi potensi bug berdasarkan deskripsi masalah yang dilaporkan klien, dan menyarankan langkah debugging. Hasilnya: jumlah miss-check berkurang drastis — sekitar 80% lebih sedikit keluhan pasca-launch."
+                </div>
+                <div class="popup-tag">Cara pakainya</div>
+                <p>Ceritakan ke ChatGPT atau Gemini: "Saya punya website e-commerce dengan fitur X, Y, Z. Buatkan checklist QA yang komprehensif sebelum launch." AI akan buatkan daftar yang jauh lebih lengkap dari yang biasanya dibuat manual.</p>
+                <div class="popup-links">
+                    <a href="https://chat.openai.com" target="_blank" class="tool-chip chip-blue">💬 ChatGPT</a>
+                    <a href="https://gemini.google.com" target="_blank" class="tool-chip chip-green">✨ Gemini</a>
+                </div>`
+        },
+        'p4-4': {
+            title: '✉️ Komunikasi Klien — Lebih Profesional',
+            body: `
+                <p>Email ke klien internasional (B2B di AS) harus profesional, jelas, dan tidak bertele-tele. Dulu ini butuh banyak revisi.</p>
+                <div class="popup-story">
+                    "Sekarang saya tulis draftnya dalam bahasa Indonesia atau poin-poin kasarnya, lalu minta Claude untuk ubah jadi email profesional dalam bahasa Inggris yang tepat nada dan konteksnya. Saya cukup review sekali, edit kalau ada yang kurang pas. Dari yang dulu 30 menit per email, sekarang 5 menit — dan kualitasnya lebih konsisten."
+                </div>
+                <p><strong>Tips:</strong> Selalu sebutkan konteks ke AI — siapa penerimanya (klien lama? baru?), apa tujuan email ini, dan nada yang diinginkan (formal, friendly, assertive). Semakin spesifik konteksnya, semakin baik hasilnya.</p>
+                <div class="popup-links">
+                    <a href="https://claude.ai" target="_blank" class="tool-chip chip-purple">🤖 Claude — terbaik untuk nulis email natural</a>
+                    <a href="https://chat.openai.com" target="_blank" class="tool-chip chip-blue">💬 ChatGPT — versatile untuk berbagai gaya</a>
+                </div>`
+        },
+
+        // SLIDE 5 — Peluang AI
+        'p5-1': {
+            title: '⚡ Otomasi Pekerjaan Rutin — Contoh di Akuntansi',
+            body: `
+                <p>Pekerjaan rutin yang paling sering diotomasi dengan AI di bidang keuangan dan akuntansi:</p>
+                <ul style="list-style:none; padding:0; margin:10px 0;">
+                    <li style="padding:6px 0 6px 20px; position:relative; color:rgba(210,228,255,0.88);">→ Rekonsiliasi bank: upload data transaksi ke ChatGPT/Gemini, minta identifikasi yang tidak cocok</li>
+                    <li style="padding:6px 0 6px 20px; position:relative; color:rgba(210,228,255,0.88);">→ Kategorisasi pengeluaran dari data Excel — cukup upload dan minta AI kelompokkan</li>
+                    <li style="padding:6px 0 6px 20px; position:relative; color:rgba(210,228,255,0.88);">→ Pembuatan laporan ringkas dari data mentah</li>
+                    <li style="padding:6px 0 6px 20px; position:relative; color:rgba(210,228,255,0.88);">→ Pengecekan formula spreadsheet yang error</li>
+                </ul>
+                <div class="popup-story">
+                    "Yang biasanya butuh setengah hari bisa selesai dalam 1-2 jam. Tapi ingat — output AI tetap harus diverifikasi oleh yang paham akuntansi. AI mempercepat proses, bukan menggantikan judgement profesional."
+                </div>
+                <div class="popup-links">
+                    <a href="https://chat.openai.com" target="_blank" class="tool-chip chip-blue">💬 ChatGPT (Advanced Data Analysis)</a>
+                    <a href="https://gemini.google.com" target="_blank" class="tool-chip chip-green">✨ Gemini (integrasi Google Sheets)</a>
+                </div>`
+        },
+        'p5-2': {
+            title: '🧠 Analisis & Keputusan — Dari Data ke Insight',
+            body: `
+                <p>AI tidak hanya memproses data — ia bisa membantu menginterpretasikan dan mengubahnya menjadi insight yang actionable.</p>
+                <div class="popup-tag">Contoh penggunaan nyata</div>
+                <ul style="list-style:none; padding:0; margin:10px 0;">
+                    <li style="padding:6px 0 6px 20px; position:relative; color:rgba(210,228,255,0.88);">→ Upload laporan keuangan ke Claude → minta analisis tren dan anomali</li>
+                    <li style="padding:6px 0 6px 20px; position:relative; color:rgba(210,228,255,0.88);">→ Pakai NotebookLM untuk "ngobrol" dengan dokumen panjang (peraturan, kontrak)</li>
+                    <li style="padding:6px 0 6px 20px; position:relative; color:rgba(210,228,255,0.88);">→ Perplexity untuk riset tren industri dengan referensi sumber yang jelas</li>
+                </ul>
+                <p><strong>NotebookLM</strong> sangat berguna untuk mahasiswa — upload jurnal atau materi kuliah, lalu tanyakan apapun tentang isinya. AI akan menjawab berdasarkan dokumen yang kamu upload, bukan dari internet umum.</p>
+                <div class="popup-links">
+                    <a href="https://www.perplexity.ai" target="_blank" class="tool-chip chip-purple">🔍 Perplexity — riset dengan sumber</a>
+                    <a href="https://notebooklm.google.com" target="_blank" class="tool-chip chip-green">📔 NotebookLM — AI untuk dokumenmu</a>
+                </div>`
+        },
+        'p5-3': {
+            title: '✍️ Kreasi & Komunikasi — Proses Kreatif yang Lebih Cepat',
+            body: `
+                <p>AI bukan hanya untuk yang "teknis" — bidang kreasi dan komunikasi justru salah satu yang paling banyak berubah.</p>
+                <div class="popup-tag">Yang bisa kamu buat dengan AI sekarang</div>
+                <ul style="list-style:none; padding:0; margin:10px 0;">
+                    <li style="padding:6px 0 6px 20px; position:relative; color:rgba(210,228,255,0.88);">→ Slide presentasi profesional dalam hitungan menit (Gamma.app)</li>
+                    <li style="padding:6px 0 6px 20px; position:relative; color:rgba(210,228,255,0.88);">→ Proposal bisnis atau skripsi draft awal yang terstruktur rapi</li>
+                    <li style="padding:6px 0 6px 20px; position:relative; color:rgba(210,228,255,0.88);">→ Email profesional dalam berbagai bahasa dan gaya</li>
+                    <li style="padding:6px 0 6px 20px; position:relative; color:rgba(210,228,255,0.88);">→ Caption medsos, posting LinkedIn, konten marketing</li>
+                </ul>
+                <div class="popup-story">
+                    "Presentasi seminar ini sebagian besar dibantu AI — tapi seluruh ide, cerita, dan pengalamannya tetap dari saya. AI membantu eksekusinya lebih cepat dan lebih rapi. Ini yang dimaksud manusia + AI = powerful."
+                </div>
+                <div class="popup-links">
+                    <a href="https://gamma.app" target="_blank" class="tool-chip chip-orange">🎨 Gamma — slide dari AI (gratis)</a>
+                    <a href="https://claude.ai" target="_blank" class="tool-chip chip-purple">🤖 Claude — nulis panjang & terstruktur</a>
+                </div>`
+        },
+        'p5-4': {
+            title: '📋 Efisiensi Dokumen — AI yang Bisa "Baca" Dokumenmu',
+            body: `
+                <p>Salah satu kekuatan AI yang paling berguna untuk pekerjaan profesional: kemampuan memproses dokumen panjang yang biasanya butuh waktu lama untuk dibaca.</p>
+                <div class="popup-story">
+                    "Bayangkan kamu dapat kontrak 50 halaman dari klien. Dulu kamu harus baca semua dulu baru bisa jawab pertanyaan. Sekarang: upload ke Claude, tanya 'Apa klausul yang paling berisiko untuk pihak kami?' atau 'Ringkas poin-poin utama kontrak ini dalam 10 bullet.' Jawabannya langsung, akurat, dan berdasarkan isi dokumen."
+                </div>
+                <div class="popup-tag">Cocok untuk mahasiswa</div>
+                <p>Upload jurnal ilmiah ke NotebookLM → tanya pertanyaan riset → dapatkan jawaban yang dikutip langsung dari sumber. Jauh lebih cepat dari membaca puluhan halaman.</p>
+                <div class="popup-links">
+                    <a href="https://notebooklm.google.com" target="_blank" class="tool-chip chip-green">📔 NotebookLM — gratis, upload PDF</a>
+                    <a href="https://claude.ai" target="_blank" class="tool-chip chip-purple">🤖 Claude — konteks dokumen terpanjang</a>
+                </div>`
+        },
+        'p5-5': {
+            title: '🎯 Dari Pelaksana → Advisor — Pergeseran Peran',
+            body: `
+                <p>Ini bukan sekadar jargon — ini pergeseran nyata yang sudah terjadi di banyak perusahaan.</p>
+                <div class="popup-tag">Perbedaan Pelaksana vs Advisor</div>
+                <ul style="list-style:none; padding:0; margin:10px 0;">
+                    <li style="padding:8px 0 8px 20px; position:relative; color:rgba(210,228,255,0.88); border-bottom: 1px solid rgba(100,160,255,0.08);">
+                        <strong style="color:#f87171;">Pelaksana (terancam):</strong> "Data sudah direkap, laporan sudah jadi." — selesai di sana.
+                    </li>
+                    <li style="padding:8px 0 8px 20px; position:relative; color:rgba(210,228,255,0.88);">
+                        <strong style="color:#34d399;">Advisor (nilainya naik):</strong> "Data sudah direkap, laporan sudah jadi. Saya menemukan tren X yang menarik — ini rekomendasinya untuk Q3."
+                    </li>
+                </ul>
+                <div class="popup-story">
+                    "Bayangkan dua lulusan akuntansi: yang satu kerjanya setiap hari input angka dan cetak laporan — bisa digantikan AI. Yang satu lagi bisa baca laporan keuangan, temukan anomali, lalu kasih rekomendasi ke direksi. Yang kedua itu yang disebut Advisor — dan nilainya jauh lebih tinggi di mata perusahaan."
+                </div>
+                <p>AI mengerjakan bagian pelaksana lebih cepat. Tugasmu adalah naik ke level Advisor — yang AI tidak bisa lakukan sendirian.</p>`
+        },
+        'p5-6': {
+            title: '🚀 Profesi Baru — Definisi & Peluang',
+            body: `
+                <div class="popup-tag">Prompt Engineer</div>
+                <p>Ahli "ngobrol" dengan AI. Merancang instruksi (prompt) yang tepat agar AI menghasilkan output akurat dan berkualitas. Gajinya bisa ratusan juta per tahun — dan perusahaan besar seperti Anthropic, Google, OpenAI aktif mencarinya.</p>
+                <div class="popup-divider"></div>
+                <div class="popup-tag">AI Auditor</div>
+                <p>Memeriksa apakah sistem AI berjalan dengan benar, adil, dan tidak bias. Sangat dibutuhkan di bidang keuangan dan hukum karena regulasi AI makin ketat.</p>
+                <div class="popup-divider"></div>
+                <div class="popup-tag">Vibe Coder</div>
+                <p>Bisa bikin aplikasi atau website tanpa coding manual — cukup deskripsikan ke AI, dan AI yang nulis kodenya. Bukan programmer klasik, tapi bisa "ngevibe" sama AI untuk menghasilkan produk digital.</p>
+                <div class="popup-divider"></div>
+                <div class="popup-tag">Data Storyteller</div>
+                <p>Mengambil data dari AI dan mengubahnya jadi cerita yang mudah dipahami semua orang. Skill ini sangat dicari karena banyak data tapi sedikit yang bisa menyampaikannya dengan efektif.</p>
+                <div class="popup-links">
+                    <a href="https://www.linkedin.com/jobs/search/?keywords=prompt+engineer" target="_blank" class="tool-chip chip-blue">🔗 Cari "Prompt Engineer" di LinkedIn</a>
+                    <a href="https://www.linkedin.com/jobs/search/?keywords=ai+auditor" target="_blank" class="tool-chip chip-blue">🔗 Cari "AI Auditor" di LinkedIn</a>
+                </div>`
+        },
+
+        // SLIDE 6 — Tantangan & Etika
+        'p6-1': {
+            title: '🔴 Transformasi Entry-Level — Apa Artinya?',
+            body: `
+                <p><strong>Entry-level</strong> = posisi pekerjaan awal, biasanya untuk fresh graduate. Tugasnya biasanya: input data, rekap laporan, cetak dokumen, isi spreadsheet.</p>
+                <div class="popup-story">
+                    "Bayangkan ada perusahaan yang dulu butuh 5 orang untuk input data transaksi setiap hari. Sekarang dengan AI, 1 orang + AI bisa kerjakan yang sama dalam waktu yang lebih singkat. Bukan berarti tidak ada lapangan kerja — tapi artinya standar masuknya naik. Yang lolos bukan yang cuma bisa input data, tapi yang bisa analisis data, beri rekomendasi, dan kolaborasi dengan AI."
+                </div>
+                <p>Makanya mulai sekarang, posisikan diri bukan sebagai <em>operator</em>, tapi sebagai <em>pengambil keputusan yang menggunakan AI sebagai alat</em>.</p>`
+        },
+        'p6-2': {
+            title: '🟡 AI Literacy Gap — Kesenjangan yang Bisa Ditutup',
+            body: `
+                <p><strong>AI Literacy</strong> = kemampuan memahami dan menggunakan AI secara efektif dalam pekerjaan. <strong>Gap</strong> = kesenjangan antara yang diharapkan perusahaan vs kemampuan fresh graduate saat ini.</p>
+                <div class="popup-story">
+                    "Ini bukan soal bisa coding atau tidak. Ini soal: apakah kamu tahu cara memberi instruksi yang tepat ke AI? Apakah kamu tahu cara memverifikasi hasilnya? Apakah kamu tahu tool apa yang paling efektif untuk tugas tertentu?"
+                </div>
+                <p>💡 <strong>Kabar baiknya:</strong> Gap ini bisa ditutup dalam hitungan minggu dengan latihan konsisten. Yang mulai belajar hari ini, gap-nya akan tertutup jauh sebelum lulus.</p>`
+        },
+        'p6-3': {
+            title: '🔴 Bahaya Over-Trust — Kasus Nyata: Steven Schwartz',
+            body: `
+                <p>Ini bukan cerita rekayasa — ini kejadian nyata yang menjadi peringatan keras bagi semua pengguna AI.</p>
+                <div class="popup-story">
+                    "Tahun 2023, pengacara di New York bernama <strong>Steven Schwartz</strong> menggunakan ChatGPT untuk riset hukum — mencari referensi kasus pengadilan yang relevan. ChatGPT memberikan 6 referensi kasus lengkap dengan nama, nomor perkara, dan detailnya. Terlihat sangat meyakinkan. Tapi saat berkas diserahkan ke pengadilan dan dicek... 6 kasus itu tidak pernah ada. Semuanya dikarang oleh AI. Inilah yang disebut 'halusinasi AI'. Pengacara itu mendapat sanksi resmi dari pengadilan."
+                </div>
+                <p><strong>Aturan wajib:</strong> Selalu verifikasi data, angka, nama, dan referensi yang AI berikan — terutama sebelum digunakan dalam dokumen resmi, laporan, atau tugas akademis.</p>
+                <div class="popup-links">
+                    <a href="https://www.nytimes.com/2023/05/27/nyregion/avianca-airline-lawsuit-chatgpt.html" target="_blank" class="tool-chip chip-blue">📰 Baca artikel asli (NYTimes)</a>
+                </div>`
+        },
+        'p6-4': {
+            title: '🟡 Persaingan Makin Ketat — Analogi yang Tepat',
+            body: `
+                <p>Dulu, standar melamar kerja adalah: punya ijazah, bisa Office, bisa bahasa Inggris. Sekarang standar itu sudah naik.</p>
+                <div class="popup-story">
+                    "Bayangkan tahun 2005 — perusahaan mulai mensyaratkan karyawan harus bisa email dan Microsoft Office. Yang tidak bisa komputer, tersisih. Sekarang, yang tidak bisa berkolaborasi dengan AI, akan mengalami hal yang sama. Bedanya, perubahan ini jauh lebih cepat."
+                </div>
+                <p>Banyak lowongan sekarang sudah mencantumkan: <em>"familiar with AI tools"</em> atau <em>"experience with data analysis"</em>. Tren ini akan terus meningkat.</p>
+                <p>💡 <strong>Kabar baik:</strong> Kalian masih di kampus. Masih ada waktu untuk mulai. Yang penting mulai sekarang — tidak perlu menunggu lulus.</p>`
+        },
+
+        // SLIDE 3 — Jensen Huang & 3 Gelombang AI
+        'p3-jensen': {
+            title: '💬 Konteks & Makna Kutipan Jensen Huang',
+            body: `
+                <p><strong>Jensen Huang</strong> adalah CEO Nvidia — perusahaan yang membuat chip yang menjalankan hampir semua AI di dunia saat ini. Nvidia adalah perusahaan pertama di dunia yang mencapai market cap USD 5 triliun. Ini bukan orang sembarangan.</p>
+                <div class="popup-tag">Apa yang sebenarnya Jensen maksud?</div>
+                <div class="popup-story">
+                    "Yang Jensen maksud sebenarnya sederhana: dulu kalau mau kerja di tech, kamu wajib bisa coding. Sekarang? AI sudah bisa coding sendiri — tinggal kamu prompt dengan benar. Tapi yang tidak bisa digantikan AI adalah <em>pemahaman mendalam di suatu bidang</em>. Fisika misalnya — untuk bikin robot yang bisa bergerak di dunia nyata, AI perlu dipandu oleh orang yang benar-benar paham fisika. Nah itu analogi Jensen."
+                </div>
+                <div class="popup-tag">Artinya untuk kamu (akuntansi, manajemen, SI)</div>
+                <p>Kalau kamu paham betul cara baca laporan keuangan, neraca, dan audit — lalu kamu kombinasikan itu dengan AI — hasilnya jauh lebih akurat dan bernilai tinggi daripada orang yang tidak punya latar belakang akuntansi tapi cuma bisa pakai AI.</p>
+                <p><strong>Domain expertise kamu adalah senjata utama. AI-nya yang mempercepat.</strong></p>
+                <div class="popup-story">
+                    "Ini bukan soal fisika vs software. Ini soal: punya keahlian mendalam di bidangmu, lalu gunakan AI untuk melipatgandakan hasilnya. Akuntansi + AI = powerful. Manajemen + AI = powerful. Sistem Informasi + AI = bahkan lebih powerful lagi."
+                </div>`
+        },
+        'p3-timeline': {
+            title: '🌊 3 Gelombang AI — Penjelasan Lengkap',
+            body: `
+                <div class="popup-tag">1. Perceptual AI (2012) — Sudah Lewat</div>
+                <p>Era pertama AI yang bisa "melihat" dan "mendengar". Contoh yang kamu pakai sehari-hari tanpa sadar:</p>
+                <ul style="list-style:none; padding:0; margin:8px 0 14px;">
+                    <li style="padding:4px 0 4px 18px; color:rgba(210,228,255,0.88);">→ Face ID di iPhone / Android</li>
+                    <li style="padding:4px 0 4px 18px; color:rgba(210,228,255,0.88);">→ Filter wajah di Instagram & TikTok</li>
+                    <li style="padding:4px 0 4px 18px; color:rgba(210,228,255,0.88);">→ Google Photos yang bisa kenali wajah orang</li>
+                    <li style="padding:4px 0 4px 18px; color:rgba(210,228,255,0.88);">→ Google Lens yang bisa baca teks dari foto nota</li>
+                </ul>
+                <div class="popup-divider"></div>
+                <div class="popup-tag">2. Generative AI (Sekarang) — Kita Ada di Sini</div>
+                <p>AI yang bisa <em>membuat sesuatu baru</em>: nulis teks, bikin gambar, ngobrol, analisis data, bahkan coding. Tools yang ada sekarang:</p>
+                <ul style="list-style:none; padding:0; margin:8px 0 14px;">
+                    <li style="padding:4px 0 4px 18px; color:rgba(210,228,255,0.88);">→ <strong>ChatGPT</strong> (OpenAI) — paling dikenal, bisa nulis, tanya-jawab, coding</li>
+                    <li style="padding:4px 0 4px 18px; color:rgba(210,228,255,0.88);">→ <strong>Gemini</strong> (Google) — terintegrasi langsung ke Gmail, Docs, Drive</li>
+                    <li style="padding:4px 0 4px 18px; color:rgba(210,228,255,0.88);">→ <strong>Claude</strong> (Anthropic) — terbaik untuk analisis dokumen panjang & nulis yang natural</li>
+                    <li style="padding:4px 0 4px 18px; color:rgba(210,228,255,0.88);">→ <strong>AI Agent</strong> — level lebih advanced: AI yang tidak hanya menjawab, tapi bisa mengerjakan tugas secara otomatis tanpa terus disuruh</li>
+                </ul>
+                <div class="popup-divider"></div>
+                <div class="popup-tag">3. Physical AI (Masa Depan) — Next Wave</div>
+                <p>AI yang ditanamkan ke mesin dan robot di dunia nyata. Contoh: robot pabrik yang bisa mengemas produk sendiri, mobil self-driving (Tesla, Waymo), drone pengiriman paket, robot bedah yang membantu dokter operasi. Karena berinteraksi dengan dunia nyata, AI ini harus paham fisika: berat, keseimbangan, gravitasi — inilah mengapa Jensen bilang fisika jadi sangat relevan.</p>
+                <div class="popup-links">
+                    <a href="https://gemini.google.com" target="_blank" class="tool-chip chip-green">✨ Coba Gemini</a>
+                    <a href="https://claude.ai" target="_blank" class="tool-chip chip-purple">🤖 Coba Claude</a>
+                    <a href="https://chat.openai.com" target="_blank" class="tool-chip chip-blue">💬 Coba ChatGPT</a>
+                </div>`
+        },
+
+        // SLIDE 7 — Fondasi Digital
+        'p7-cloud': {
+            title: '☁️ Cloud-First — Kenapa Ini Penting?',
+            body: `
+                <div class="popup-story">
+                    "Saya dulu pernah mengalami ini: lagi keluar kota, ada klien minta data yang saya butuhkan — dan datanya ada di komputer di kantor. Panik, minta orang lain buka, ternyata tidak bisa karena ada password. Situasi itu tidak akan terjadi kalau saya sudah cloud-first dari awal."
+                </div>
+                <div class="popup-tag">Alat cloud yang wajib dibiasakan sekarang</div>
+                <ul style="list-style:none; padding:0; margin:8px 0 14px;">
+                    <li style="padding:6px 0 6px 18px; color:rgba(210,228,255,0.88); border-bottom:1px solid rgba(100,160,255,0.07);">
+                        <strong>Google Docs</strong> — pengganti Word. Bisa diedit bersama real-time, tersimpan otomatis, akses dari HP manapun. Gratis.
+                    </li>
+                    <li style="padding:6px 0 6px 18px; color:rgba(210,228,255,0.88); border-bottom:1px solid rgba(100,160,255,0.07);">
+                        <strong>Google Sheets</strong> — pengganti Excel untuk kebutuhan sehari-hari. Untuk data kompleks tetap bisa Excel, tapi simpan di Drive.
+                    </li>
+                    <li style="padding:6px 0 6px 18px; color:rgba(210,228,255,0.88);">
+                        <strong>Google Drive / OneDrive</strong> — semua file di satu tempat, bisa diakses dari perangkat apapun. Tidak ada lagi "filenya ketinggalan di rumah".
+                    </li>
+                </ul>
+                <p>💡 <strong>Bonus:</strong> Gemini sudah terintegrasi langsung ke Google Docs dan Sheets. Jadi kalau sudah terbiasa cloud, adopsi AI-nya akan jauh lebih mulus — karena semuanya terhubung.</p>
+                <div class="popup-links">
+                    <a href="https://docs.google.com" target="_blank" class="tool-chip chip-green">📄 Google Docs</a>
+                    <a href="https://sheets.google.com" target="_blank" class="tool-chip chip-green">📊 Google Sheets</a>
+                    <a href="https://drive.google.com" target="_blank" class="tool-chip chip-green">🗂️ Google Drive</a>
+                    <a href="https://onedrive.live.com" target="_blank" class="tool-chip chip-blue">☁️ OneDrive</a>
+                </div>`
+        },
+        'p7-security': {
+            title: '🔒 Keamanan Digital — Panduan Praktis',
+            body: `
+                <p>Di era AI dan cloud, akun digital kamu adalah aset nyata. Kehilangan akses ke email atau Google Drive itu sama seriusnya dengan kehilangan dompet — bahkan lebih.</p>
+                <div class="popup-tag">🔐 2FA — Two-Factor Authentication</div>
+                <p>Aktifkan di semua akun penting: email, Google, akun kampus, aplikasi perbankan. Artinya meskipun password bocor, orang lain tetap tidak bisa masuk tanpa kode kedua yang ada di HP kamu.</p>
+                <div class="popup-tag">🗝️ Password Manager</div>
+                <p>Jangan pakai password yang sama di mana-mana. Pakai <strong>Bitwarden</strong> (gratis, open source) untuk menyimpan semua password dengan aman. Kamu hanya perlu ingat satu <em>master password</em>.</p>
+                <div class="popup-tag">🤖 Privasi di AI — Free vs Pro vs Enterprise</div>
+                <ul style="list-style:none; padding:0; margin:8px 0 14px;">
+                    <li style="padding:5px 0 5px 18px; color:rgba(210,228,255,0.88); border-bottom:1px solid rgba(100,160,255,0.07);">
+                        <strong style="color:#fbbf24;">AI Free:</strong> Data percakapan bisa dipakai untuk training model (bisa dimatikan di pengaturan)
+                    </li>
+                    <li style="padding:5px 0 5px 18px; color:rgba(210,228,255,0.88); border-bottom:1px solid rgba(100,160,255,0.07);">
+                        <strong style="color:#60a5fa;">AI Pro/Paid:</strong> Umumnya data tidak dipakai untuk training. Lebih aman.
+                    </li>
+                    <li style="padding:5px 0 5px 18px; color:rgba(210,228,255,0.88);">
+                        <strong style="color:#34d399;">AI Enterprise:</strong> Ada kontrak hukum khusus soal data — paling aman untuk data perusahaan.
+                    </li>
+                </ul>
+                <div class="popup-story">
+                    "Aturan praktisnya: kalau data itu tidak akan kamu posting di media sosial, jangan masukkan ke AI publik. Data klien, nomor rekening, rahasia bisnis — jangan. Sesederhana itu."
+                </div>
+                <div class="popup-links">
+                    <a href="https://bitwarden.com" target="_blank" class="tool-chip chip-orange">🔑 Bitwarden — Password Manager Gratis</a>
+                </div>`
+        },
+
+        // SLIDE 8 — Kesiapan
+        'p8-tahap1': {
+            title: '🚀 Tahap 1 — Mulai Sekarang, Hari Ini',
+            body: `
+                <div class="popup-tag">AI Tools Gratis yang Bisa Dibuka Sekarang</div>
+                <div class="popup-links" style="margin-bottom:16px;">
+                    <a href="https://chat.openai.com" target="_blank" class="tool-chip chip-blue">💬 ChatGPT</a>
+                    <a href="https://gemini.google.com" target="_blank" class="tool-chip chip-green">✨ Gemini</a>
+                    <a href="https://claude.ai" target="_blank" class="tool-chip chip-purple">🤖 Claude</a>
+                    <a href="https://copilot.microsoft.com" target="_blank" class="tool-chip chip-blue">🪟 Copilot</a>
+                </div>
+                <div class="popup-tag">Kursus Gratis Bersertifikat</div>
+                <ul style="list-style:none; padding:0; margin:8px 0 14px;">
+                    <li style="padding:6px 0 6px 18px; color:rgba(210,228,255,0.88); border-bottom:1px solid rgba(100,160,255,0.07);">
+                        <strong>Google AI Essentials</strong> — gratis, ada sertifikat dari Google. ~5-6 jam, bisa dikerjakan kapan saja.<br>
+                        <a href="https://www.coursera.org/learn/google-ai-essentials" target="_blank" style="color:var(--accent-cyan); font-size:13px;">coursera.org/learn/google-ai-essentials</a>
+                    </li>
+                    <li style="padding:6px 0 6px 18px; color:rgba(210,228,255,0.88); border-bottom:1px solid rgba(100,160,255,0.07);">
+                        <strong>Coursera: AI for Everyone</strong> — oleh Andrew Ng (salah satu pakar AI dunia), bisa diaudit gratis tanpa bayar sepeser pun.<br>
+                        <a href="https://www.coursera.org/learn/ai-for-everyone" target="_blank" style="color:var(--accent-cyan); font-size:13px;">coursera.org/learn/ai-for-everyone</a>
+                    </li>
+                    <li style="padding:6px 0 6px 18px; color:rgba(210,228,255,0.88);">
+                        <strong>Microsoft AI Skills</strong> — modul-modul singkat tentang AI dari Microsoft, gratis.<br>
+                        <a href="https://learn.microsoft.com" target="_blank" style="color:var(--accent-cyan); font-size:13px;">learn.microsoft.com → cari "AI"</a>
+                    </li>
+                </ul>
+                <div class="popup-tag">Skill yang AI Tidak Bisa Gantikan</div>
+                <ul style="list-style:none; padding:0; margin:8px 0;">
+                    <li style="padding:4px 0 4px 18px; color:rgba(210,228,255,0.88);">→ <strong>Berpikir kritis</strong> — menilai apakah output AI masuk akal atau tidak</li>
+                    <li style="padding:4px 0 4px 18px; color:rgba(210,228,255,0.88);">→ <strong>Komunikasi interpersonal</strong> — membangun hubungan, negosiasi, memimpin orang</li>
+                    <li style="padding:4px 0 4px 18px; color:rgba(210,228,255,0.88);">→ <strong>Domain expertise</strong> — pengetahuan mendalam di bidangmu (akuntansi, manajemen, dll)</li>
+                    <li style="padding:4px 0 4px 18px; color:rgba(210,228,255,0.88);">→ <strong>Kreativitas & empati</strong> — memahami kebutuhan manusia yang tidak bisa sepenuhnya dibaca AI</li>
+                </ul>`
+        },
+        'p8-tahap2': {
+            title: '📅 Tahap 2 — Bulan Ini / Semester Ini',
+            body: `
+                <div class="popup-tag">Integrasikan AI ke Tugas Sehari-hari</div>
+                <ul style="list-style:none; padding:0; margin:8px 0 14px;">
+                    <li style="padding:6px 0 6px 18px; color:rgba(210,228,255,0.88); border-bottom:1px solid rgba(100,160,255,0.07);">
+                        Bikin laporan atau makalah? → Pakai <strong>ChatGPT</strong> atau <strong>Claude</strong> untuk bantu kerangka dan draft awal. Kamu yang tetap edit dan validasi.
+                    </li>
+                    <li style="padding:6px 0 6px 18px; color:rgba(210,228,255,0.88); border-bottom:1px solid rgba(100,160,255,0.07);">
+                        Bikin slide presentasi? → Coba <a href="https://gamma.app" target="_blank" style="color:var(--accent-cyan);">Gamma.app</a> — ketik topikmu, AI langsung buatkan slide yang desainnya bagus.
+                    </li>
+                    <li style="padding:6px 0 6px 18px; color:rgba(210,228,255,0.88); border-bottom:1px solid rgba(100,160,255,0.07);">
+                        Punya data Excel/CSV yang perlu dianalisis? → Upload langsung ke ChatGPT (Advanced Data Analysis) atau Gemini — tanya apa saja tentang datanya.
+                    </li>
+                    <li style="padding:6px 0 6px 18px; color:rgba(210,228,255,0.88);">
+                        Butuh riset cepat dengan referensi jelas? → Pakai <a href="https://www.perplexity.ai" target="_blank" style="color:var(--accent-cyan);">Perplexity.ai</a> — seperti Google tapi jawabannya langsung, lengkap dengan sumber artikel aslinya.
+                    </li>
+                </ul>
+                <div class="popup-tag">📁 Cara Mulai Bangun Portofolio dari Kampus</div>
+                <ul style="list-style:none; padding:0; margin:8px 0 14px;">
+                    <li style="padding:5px 0 5px 18px; color:rgba(210,228,255,0.88);">→ Ambil data dari tugas kuliah (data penjualan UKM, laporan keuangan sederhana)</li>
+                    <li style="padding:5px 0 5px 18px; color:rgba(210,228,255,0.88);">→ Analisis dengan AI, buat visualisasi (grafik, tabel), tulis interpretasinya dalam 1 paragraf</li>
+                    <li style="padding:5px 0 5px 18px; color:rgba(210,228,255,0.88);">→ Simpan di Google Drive, dokumentasikan prosesnya</li>
+                    <li style="padding:5px 0 5px 18px; color:rgba(210,228,255,0.88);">→ Posting di LinkedIn dengan caption: "Saya mencoba analisis data ini menggunakan AI..."</li>
+                    <li style="padding:5px 0 5px 18px; color:rgba(210,228,255,0.88);">→ Ini yang akan kamu tunjukkan saat interview nanti</li>
+                </ul>
+                <div class="popup-links">
+                    <a href="https://gamma.app" target="_blank" class="tool-chip chip-orange">🎨 Gamma — Slide dari AI</a>
+                    <a href="https://www.perplexity.ai" target="_blank" class="tool-chip chip-purple">🔍 Perplexity — Riset</a>
+                </div>`
+        },
+        'p8-tahap3': {
+            title: '🎯 Tahap 3 — 3-12 Bulan ke Depan',
+            body: `
+                <div class="popup-tag">Cari Pengalaman di Lingkungan yang Pakai AI</div>
+                <p>Saat interview atau melamar magang, tanyakan langsung: <em>"Apakah perusahaan ini sudah menggunakan AI tools dalam operasional?"</em></p>
+                <p>Pertanyaan ini sendiri sudah menunjukkan bahwa kamu serius dan satu langkah lebih maju dari pelamar lain.</p>
+                <div class="popup-tag">🔗 Bangun Profil LinkedIn yang Aktif</div>
+                <ul style="list-style:none; padding:0; margin:8px 0 14px;">
+                    <li style="padding:5px 0 5px 18px; color:rgba(210,228,255,0.88);">→ Foto profil profesional (tidak harus formal, tapi jelas dan ramah)</li>
+                    <li style="padding:5px 0 5px 18px; color:rgba(210,228,255,0.88);">→ Tulis setiap project yang melibatkan data dan AI — jelaskan apa yang kamu lakukan, tool apa yang dipakai, apa hasilnya</li>
+                    <li style="padding:5px 0 5px 18px; color:rgba(210,228,255,0.88);">→ Posting konten ringan tentang hal yang kamu pelajari soal AI — ini membangun personal branding</li>
+                </ul>
+                <div class="popup-tag">📊 Kuasai Data Storytelling</div>
+                <div class="popup-story">
+                    "Ini skill yang paling dicari tapi paling jarang dimiliki. Artinya: kamu bisa ambil angka dari laporan atau analisis AI, lalu jelaskan dengan bahasa yang dipahami semua orang. Contoh: bukan bilang 'revenue naik 12.4%', tapi bilang 'pendapatan kita naik setara dengan tambahan 30 pelanggan baru bulan ini, dan tren ini akan terus naik jika kita lanjutkan strategi X.'"
+                </div>
+                <div class="popup-links">
+                    <a href="https://linkedin.com" target="_blank" class="tool-chip chip-blue">🔗 LinkedIn</a>
+                </div>`
+        },
+    };
+
+
+    // ===== POPUP FUNCTIONS =====
+    function openPopup(id) {
+        const data = popups[id];
+        if (!data) return;
+        document.getElementById('popupTitle').innerHTML = data.title;
+        document.getElementById('popupBody').innerHTML = data.body;
+        document.getElementById('popupOverlay').classList.add('open');
+        document.body.style.overflow = 'hidden';
+    }
+
+    function closePopup() {
+        document.getElementById('popupOverlay').classList.remove('open');
+        document.body.style.overflow = '';
+    }
+
+    function closePopupOnOverlay(e) {
+        if (e.target === document.getElementById('popupOverlay')) closePopup();
+    }
+
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') closePopup();
+    });
+
+    // ===== THEME TOGGLE =====
+    function toggleTheme() {
+        const currentTheme = document.documentElement.getAttribute('data-theme');
+        const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+        document.documentElement.setAttribute('data-theme', newTheme);
+        localStorage.setItem('theme', newTheme);
+        document.getElementById('themeToggle').innerHTML = newTheme === 'light' ? '🌙 Gelap' : '☀️ Terang';
+    }
+
+    // Load saved theme
+    const savedTheme = localStorage.getItem('theme');
+    if (savedTheme === 'light') {
+        document.documentElement.setAttribute('data-theme', 'light');
+        document.getElementById('themeToggle').innerHTML = '🌙 Gelap';
+    }
+    </script>
 </body>
 </html>
+
